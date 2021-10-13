@@ -1,13 +1,14 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { NativeBaseProvider, Box } from 'native-base'
 import firebase from 'firebase/app'
 
 // Components
 // Pages=
 import LandingScreen from './src/components/Screens/LandingScreen'
-import RegisterScreen from './src/components/Screens/Credentials/RegisterScreen'
-import LoginScreen from './src/components/Screens/Credentials/LoginScreen'
+import RegisterScreen from './src/components/Screens/authentication/RegisterScreen'
+import LoginScreen from './src/components/Screens/authentication/LoginScreen'
 import HomeScreen from './src/components/Screens/HomeScreen'
 
 
@@ -31,15 +32,17 @@ const Stack = createNativeStackNavigator()
 
 export default function App() {
 	return (
-		<NavigationContainer>
-			<Stack.Navigator>
+		<NativeBaseProvider>
+			<NavigationContainer>
+				<Stack.Navigator>
 
-				<Stack.Screen name="Landing" component={LandingScreen} options={{ title: 'Landing screen' }} />
-				<Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register screen' }} />
-				<Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login screen' }} />
-				<Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home screen' }} />
-					
-			</Stack.Navigator>
-		</NavigationContainer>
+					<Stack.Screen name="Landing" component={LandingScreen} options={{ title: 'Landing screen' }} />
+					<Stack.Screen name="Register" component={RegisterScreen} options={{ title: 'Register screen' }} />
+					<Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login screen' }} />
+					<Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home screen' }} />
+						
+				</Stack.Navigator>
+			</NavigationContainer>
+		</NativeBaseProvider>
 	)
 }

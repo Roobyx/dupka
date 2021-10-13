@@ -1,41 +1,32 @@
 import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, StatusBar, useColorScheme, Button } from 'react-native'
+import { View, SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native'
 
-type pageType = {
+type BasicTemplate = {
 	list: boolean
 	navigation?: any
 }
 
-const BasicTemplate: React.FC<pageType> = ({navigation, list, children}) => {
-	const isDarkMode = useColorScheme() === 'dark',
-		backgroundStyle = { }
+const BasicTemplate: React.FC<BasicTemplate> = ({list, children}) => {
+	const isDarkMode = useColorScheme() === 'dark'
 
-	return ( <>
-
-	{
-		list ? (
-			<SafeAreaView style={backgroundStyle}>
+	return (
+			<>
 				<StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-				<ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
-					
-					<View>
-						{ children }
-					
-							<Button title="Go to profile"
-								onPress={() =>
-									navigation.navigate('Profile', { name: 'Jane' })
-								}
-							/>
-						
-					</View>
-				</ScrollView>
-			</SafeAreaView>
-		) : (
-			<View>
-					{ children }
-			</View>
-		)}
-	</>)
+				
+				{
+					list ? (
+							<SafeAreaView>
+								<ScrollView contentInsetAdjustmentBehavior="automatic">
+									<View> { children } </View>
+								</ScrollView>
+							</SafeAreaView>
+						) : (
+							<View> { children } </View>
+					)
+				}
+				
+			</>
+		)
 }
 
 export default BasicTemplate

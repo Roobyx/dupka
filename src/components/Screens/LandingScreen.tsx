@@ -1,10 +1,7 @@
 // Vendor
 import React from 'react'
-import { Button } from 'react-native'
-
-// Components
-// Atoms
-import Input from '../Atoms/Input'
+// import { Button } from 'react-native'
+import { Button, Center, Pressable, Text } from "native-base"
 
 // Templates
 import BasicTemplate from '../Templates/BasicTemplate'
@@ -17,12 +14,13 @@ const Landing: React.FC<Page> = ({navigation}) => {
 			
 			{
 				isLoged ? (
-					<Button title="Go to home" onPress={() => navigation.navigate('Home') } />
+					<Button onPress={() => navigation.navigate('Home') } > Go to home </Button>
 				) : (
-					<>
-						<Button title="Log in" onPress={() => navigation.navigate('Login') } />
-						<Button title="Dont have an account yet?" onPress={() => navigation.navigate('Register') } />
-					</>
+
+					<Center flex={1}>
+						<Button onPress={() => navigation.navigate('Login') }> Log in  </Button>
+						<Pressable onPress={() => navigation.navigate('Register') }> <Text> Dont have an account yet? </Text> </Pressable>
+					</Center>
 				)
 			}
 			
