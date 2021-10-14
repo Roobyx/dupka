@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { Box, Text } from 'native-base'
 
-const HomeScreen = () => {
+const HomeScreen: React.FC<Page> = ({ route }) => {
 	return (
-		<View>
-			<Text> Home </Text>
-		</View>
+		<Box>
+			<Text> Welcome {route.params.email} </Text>
+		</Box>
 	)
 }
 

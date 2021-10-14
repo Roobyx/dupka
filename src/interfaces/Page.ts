@@ -1,3 +1,4 @@
 interface Page {
-	navigation: any
+	navigation?: any,
+	route?: any
 }

@@ -1,30 +1,44 @@
 // Vendor
 import React, { useState } from 'react'
 import { Button } from 'react-native'
-import firebase from 'firebase'
+// import firebase from 'firebase'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 // Components
 // Atoms
 import Input from '../../Atoms/Input'
+import Error from '../../Atoms/Error'
 
 // Templates
 import BasicTemplate from '../../Templates/BasicTemplate'
 
 const LoginScreen: React.FC<Page> = ({navigation}) => {
+	const auth = getAuth()
 
-	const [ loginState, setLoginState ]= useState({
+	const [ loginState, setLoginState ] = useState({
 		email: '',
 		password: ''
 	})
 	
+	const [ loginError, setLoginerror ] = useState('')
+	
 	const onLogin = async () => {
-		// TODO: verify passwords match first
-
 		const { email, password } = loginState
-		const res = await firebase.auth().signInWithEmailAndPassword(email, password)
 		
-		console.log('res: ', res)
-		console.log('onLogin')
+		try {
+			const res = await signInWithEmailAndPassword(auth, email, password)
+			const user = res.user
+	
+			if( user ) {
+				navigation.navigate('Home', { email: user.email })
+			}
+	
+			console.log('res: ', res)
+			console.log('Login')
+		} catch (e: any) {
+			setLoginerror(e.message)
+			console.log('Error: ', e)
+		}
 	}
 
 
@@ -46,8 +60,10 @@ const LoginScreen: React.FC<Page> = ({navigation}) => {
 				/>
 
 				<Button title="Log in" onPress={onLogin} />
-
 			</form>
+			
+			<Error> {loginError} </Error>
+
 
 		</BasicTemplate>
 	)

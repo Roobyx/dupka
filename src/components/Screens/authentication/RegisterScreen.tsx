@@ -1,7 +1,7 @@
 // Vendor
 import React, { useState } from 'react'
 import { Button } from 'react-native'
-import firebase from 'firebase'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 
 // Components
@@ -14,7 +14,7 @@ import BasicTemplate from '../../Templates/BasicTemplate'
 
 
 const RegisterScreen: React.FC<Page> = ({navigation}) => {
-
+	const auth = getAuth()
 	const [state, setState] = useState({
 		email: '',
 		password: '',
@@ -25,7 +25,7 @@ const RegisterScreen: React.FC<Page> = ({navigation}) => {
 		// TODO: verify passwords match first
 
 		const { email, password } = state
-		const res = await firebase.auth().createUserWithEmailAndPassword(email, password)
+		const res = await createUserWithEmailAndPassword(auth, email, password)
 		
 		console.log('onSignUp')
 	}

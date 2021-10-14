@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native'
+import { SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native'
+import { Box } from 'native-base'
 
 type BasicTemplate = {
 	list: boolean
@@ -17,11 +18,11 @@ const BasicTemplate: React.FC<BasicTemplate> = ({list, children}) => {
 					list ? (
 							<SafeAreaView>
 								<ScrollView contentInsetAdjustmentBehavior="automatic">
-									<View> { children } </View>
+									<Box> { children } </Box>
 								</ScrollView>
 							</SafeAreaView>
 						) : (
-							<View> { children } </View>
+							<Box> { children } </Box>
 					)
 				}
 				
