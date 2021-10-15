@@ -1,21 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView, ScrollView, StatusBar, useColorScheme } from 'react-native'
 import { Box } from 'native-base'
 
 type BasicTemplate = {
-	list: boolean
+	isList: boolean
 	navigation?: any
 }
 
-const BasicTemplate: React.FC<BasicTemplate> = ({list, children}) => {
+const BasicTemplate: React.FC<BasicTemplate> = ({isList, children}) => {
 	const isDarkMode = useColorScheme() === 'dark'
+
+	useEffect(() => {
+	}, [])
 
 	return (
 			<>
-				<StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-				
+				<StatusBar translucent={true} />
+
 				{
-					list ? (
+					isList ? (
 							<SafeAreaView>
 								<ScrollView contentInsetAdjustmentBehavior="automatic">
 									<Box> { children } </Box>
