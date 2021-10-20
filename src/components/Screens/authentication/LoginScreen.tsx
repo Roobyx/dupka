@@ -5,7 +5,8 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { Center, Pressable, Text } from 'native-base'
 
 // Redux
-import { useDispatch } from 'react-redux'
+import { setActiveUser } from '../../../../redux/features/auth/authSlice'
+import { useAppDispatch } from '../../../../redux/features/hooks'
 
 // Components
 // Atoms
@@ -13,12 +14,11 @@ import Input from '../../Atoms/Input'
 import Error from '../../Atoms/Error'
 
 // Templates
-import { setActiveUser } from '../../../../redux/features/auth/authSlice'
 import BasicTemplate from '../../Templates/BasicTemplate'
 
 const LoginScreen: React.FC<Page> = ({navigation}) => {
 	const auth = getAuth()
-	const dispatch = useDispatch()
+	const dispatch = useAppDispatch()
 
 	const [ loginState, setLoginState ] = useState({
 		email: '',
@@ -26,30 +26,23 @@ const LoginScreen: React.FC<Page> = ({navigation}) => {
 	})
 	
 	const [ loginError, setLoginerror ] = useState('')
-	
-	// const user = useContext(AuthContext)
-	// console.log('CU: ', user)
 
 	const onLogin = async () => {
 		const { email, password } = loginState
 		
 		try {
 			const res = await signInWithEmailAndPassword(auth, email, password)
-			const user = res.user
-			// console.log('User: ', user)
-			// console.log('Res: ', res)
+			const user = JSON.parse(JSON.stringify(res.user))
+			// console.log('Trying to log user: ', res.user)
 
 			if( user ) {
+				console.log('successfully logged user: ', res.user.email)
 				dispatch(setActiveUser(user))
-				console.log()
 				navigation.navigate('Home')
 			}
-	
-			// console.log('res: ', res)
-			// console.log('Login')
 		} catch (e: any) {
+			console.log('Got error while logging: ', e.message)
 			setLoginerror(e.message)
-			// console.log('Error: ', e)
 		}
 	}
 

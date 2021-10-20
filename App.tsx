@@ -1,5 +1,5 @@
 // Vendor
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NativeBaseProvider, Pressable } from 'native-base'
@@ -14,21 +14,19 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import { useAppDispatch, useAppSelector } from './redux/features/hooks'
+import { getLoadingState, getLoggedState, logUserOut } from './redux/features/auth/authSlice'
 
-import { AuthProvider } from './src/provider/AuthProvider'
 import { auth } from './firebaseSetup'
 
 // Components
-//- Pages
+//- Screens
 import LandingScreen from './src/components/Screens/LandingScreen'
 import RegisterScreen from './src/components/Screens/authentication/RegisterScreen'
 import LoginScreen from './src/components/Screens/authentication/LoginScreen'
 import HomeScreen from './src/components/Screens/HomeScreen'
 //- Molecules
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
-import { getFullUserData, getLoggedState, setLoggedOut } from './redux/features/auth/authSlice'
-import { useAppSelector } from './redux/features/hooks'
-
 
 // Nav config
 const Stack = createNativeStackNavigator()
@@ -36,38 +34,10 @@ let persistor = persistStore(store)
 
 // Creating an additional element to wrap it in the AuthProvider as Expo is missing index.ts which would usually be the wrapepr
 const Index = () => {
-	// Keep a state of loaded
-	const [ loaded, setLoaded ] = useState(false)
-	const [ userLoggedIn, setUserLoggedIn ] = useState(false)
-	
-	const user = useAppSelector(getFullUserData)
-	const loggedInState = useAppSelector(getLoggedState)
-	console.log('Logged? ', userLoggedIn)
-
-	// On user change set loaded.
-	// loaded is used to control the app flow and allow/disallow user manipulating pages to be shown
-	useEffect(() => {
-		if(user !== undefined) {
-			setLoaded(true)
-		} else {
-			setLoaded(false)
-		}
-
-		// TODO: Check for potential mem leack (unsubscribe) - Check all other useEffect hooks
-		return () => {}
-	}, [user])
-
-	// Keep track of the logged in/out state to switch nav stacks
-	useEffect(() => {
-		if(loggedInState) {
-			setUserLoggedIn(true)
-		} else {
-			setUserLoggedIn(false)
-		}
-
-		// TODO: Check for potential mem leack (unsubscribe) - Check all other useEffect hooks
-		return () => {}
-	}, [loggedInState])
+	const dispatch = useAppDispatch(),
+			loaded = useAppSelector(getLoadingState),
+			loggedInState = useAppSelector(getLoggedState)
+	console.log('Logged on land ', loggedInState)
 
 
 	// Sign the user out on demand
@@ -76,11 +46,11 @@ const Index = () => {
 	// Purge the persisted state
 	const SignOut = async () => {
 		await auth.signOut()
-		setUserLoggedIn(false)
-		setLoggedOut()
+		dispatch(logUserOut())
+
 		// TODO: Should this be here or in an action? / Should it purge everything?
 		persistor.purge()
-		console.log('Logged out ', userLoggedIn)
+		console.log('Logged out')
 	}
 
 	return (
@@ -90,7 +60,7 @@ const Index = () => {
 				<NavigationContainer>
 					<Stack.Navigator>
 						{ 
-							userLoggedIn ? (
+							loggedInState ? (
 								<>
 									<Stack.Screen name="Home" component={HomeScreen} options={{
 										headerBackVisible: false,
@@ -129,11 +99,9 @@ export default function App() {
 	return (
 		<Provider store={store}>
 			 <PersistGate loading={null} persistor={persistor}>
-				<AuthProvider>
-					<NativeBaseProvider>
-						<Index />
-					</NativeBaseProvider>
-				</AuthProvider>
+				<NativeBaseProvider>
+					<Index />
+				</NativeBaseProvider>
 			</PersistGate>
 		</Provider>
 	)

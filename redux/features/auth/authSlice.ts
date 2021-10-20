@@ -1,40 +1,41 @@
-import { createSlice, createDraftSafeSelector, createSelector } from "@reduxjs/toolkit"
+import { createSlice, createSelector, PayloadAction, createDraftSafeSelector } from "@reduxjs/toolkit"
 import { RootState } from "../../store"
-import { PURGE } from 'redux-persist'
+import { User } from "@firebase/auth"
 
 type authState = {
-	user: any,
-	loggedIn: boolean
+	user: any | null,
+	loggedIn: boolean,
+	loading: boolean
 }
 
 const initialAuthState: authState = {
-	user: {},
-	loggedIn: false
+	user: null,
+	loggedIn: false,
+	loading: true
 }
 
 export const authSlice = createSlice({
 	name: "authContext",
 	initialState: initialAuthState,
 	reducers: {
-		setActiveUser: (state, { payload }) => {
-			state.user = payload
+		setLoading: (state, action: PayloadAction<boolean>) => {
+			state.loading = action.payload
+		},
+		setActiveUser: (state, action: PayloadAction<any | null>) => {
+			state.user = action.payload
 			state.loggedIn = true
 			console.log('Current user set to: ', state.user)
 			console.log('Current auth login state: ', state.loggedIn)
 		},
-		setLoggedOut: (state) => {
-			state = initialAuthState
+		logUserOut: (state) => {
+			state.user = null
 			state.loggedIn = false
+			console.log('Set redux state to logged out: ', state)
 		}
-	},
-	// extraReducers: (builder) => {
-	// 	builder.addCase(PURGE, (state) => {
-	// 		authSlice.removeAll(state)
-	// 	})
-	// }
+	}
 })
 
-export const { setActiveUser, setLoggedOut } = authSlice.actions
+export const { setActiveUser, logUserOut } = authSlice.actions
 
 const selectSelf = (state: RootState) => state
 
@@ -48,9 +49,14 @@ export const getUserEmail = createSelector(
 	(state: RootState) => state.auth.user.email
 )
 
-export const getLoggedState = createSelector(
+export const getLoggedState = createDraftSafeSelector(
 	selectSelf,
 	(state: RootState) => state.auth.loggedIn
+)
+
+export const getLoadingState = createDraftSafeSelector(
+	selectSelf,
+	(state: RootState) => state.auth.loading
 )
 
 export default authSlice.reducer
