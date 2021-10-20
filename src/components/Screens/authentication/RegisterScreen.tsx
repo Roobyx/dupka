@@ -1,21 +1,27 @@
 // Vendor
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from 'react-native'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { Center, Pressable, Text } from 'native-base'
+
+// Firebase
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { collection, addDoc  } from 'firebase/firestore'
+
+import { auth as FbAuth, db as FBdb } from '../../../../firebaseSetup'
 
 // Components
 // Atoms
 import Input from '../../Atoms/Input'
 
 // Templates
-import NotLoggedTemplate from '../../Templates/NotLoggedTemplate'
+import BasicTemplate from '../../Templates/BasicTemplate'
 
 
 
 const RegisterScreen: React.FC<Page> = ({navigation}) => {
-	const auth = getAuth()
-	const [state, setState] = useState({
+	const auth = FbAuth,
+	db = FBdb,
+	[state, setState] = useState({
 		email: '',
 		password: '',
 		passwordVerify: ''
@@ -23,19 +29,27 @@ const RegisterScreen: React.FC<Page> = ({navigation}) => {
 
 	const onSignup = async () => {
 		// TODO: verify passwords match first
-
 		const { email, password } = state
 		const res = await createUserWithEmailAndPassword(auth, email, password)
-		
-		// console.log('onSignUp')
+
+		try {
+			const docRef = await addDoc(collection(db, "users"), {
+				uid: res.user.uid,
+				email: state.email
+			})
+
+			console.log("Document written with ID: ", docRef.id)
+		} catch(e) {
+			console.log('Error in db write: ', e)
+		}
 	}
 
 	return (
-		<NotLoggedTemplate navigation={navigation}>
+		<BasicTemplate isList={false} navigation={navigation}>
 
 			<Input
 				onChangeText={(email) => setState({...state, email })}
-				placeholder="Username"
+				placeholder="Email"
 				keyboardType="default"
 			/>
 
@@ -61,7 +75,7 @@ const RegisterScreen: React.FC<Page> = ({navigation}) => {
 				</Pressable>
 			</Center>
 
-		</NotLoggedTemplate>
+		</BasicTemplate>
 	)
 }
 

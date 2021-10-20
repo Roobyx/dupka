@@ -4,16 +4,21 @@ import { Button } from 'react-native'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { Center, Pressable, Text } from 'native-base'
 
+// Redux
+import { useDispatch } from 'react-redux'
+
 // Components
 // Atoms
 import Input from '../../Atoms/Input'
 import Error from '../../Atoms/Error'
 
 // Templates
-import NotLoggedTemplate from '../../Templates/NotLoggedTemplate'
+import { setActiveUser } from '../../../../redux/features/auth/authSlice'
+import BasicTemplate from '../../Templates/BasicTemplate'
 
 const LoginScreen: React.FC<Page> = ({navigation}) => {
 	const auth = getAuth()
+	const dispatch = useDispatch()
 
 	const [ loginState, setLoginState ] = useState({
 		email: '',
@@ -31,9 +36,13 @@ const LoginScreen: React.FC<Page> = ({navigation}) => {
 		try {
 			const res = await signInWithEmailAndPassword(auth, email, password)
 			const user = res.user
-	
+			// console.log('User: ', user)
+			// console.log('Res: ', res)
+
 			if( user ) {
-				navigation.navigate('Home', { email: user.email })
+				dispatch(setActiveUser(user))
+				console.log()
+				navigation.navigate('Home')
 			}
 	
 			// console.log('res: ', res)
@@ -46,7 +55,7 @@ const LoginScreen: React.FC<Page> = ({navigation}) => {
 
 
 	return (
-		<NotLoggedTemplate navigation={navigation}>
+		<BasicTemplate isList={false} navigation={navigation}>
 
 			<Input
 				onChangeText={(email) => setLoginState( {...loginState, email})}
@@ -72,7 +81,7 @@ const LoginScreen: React.FC<Page> = ({navigation}) => {
 			<Error> {loginError} </Error>
 
 
-		</NotLoggedTemplate>
+		</BasicTemplate>
 	)
 }
 
