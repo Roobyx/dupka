@@ -1,9 +1,9 @@
 // Vendor
-import React, { useContext } from 'react'
+import React from 'react'
 import { Button, Center, Pressable, Text } from "native-base"
 
 // Templates
-import BasicTemplate from '../Templates/BasicTemplate'
+import BasicTemplate from '../../Templates/BasicTemplate'
 
 const Landing: React.FC<Page> = ({navigation}) => {
 	return (

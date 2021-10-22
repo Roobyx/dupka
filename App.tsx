@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NativeBaseProvider, Pressable } from 'native-base'
 import Icon from 'react-native-vector-icons/Entypo'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { LogBox } from 'react-native'
 
 // Expo
@@ -24,22 +24,24 @@ import { auth } from './firebaseSetup'
 
 // Components
 //- Screens
-import LandingScreen from './src/components/Screens/LandingScreen'
-import RegisterScreen from './src/components/Screens/authentication/RegisterScreen'
-import LoginScreen from './src/components/Screens/authentication/LoginScreen'
-import HomeScreen from './src/components/Screens/HomeScreen'
+import LandingScreen from './src/components/Screens/GlobalWrappers/LandingScreen'
+import RegisterScreen from './src/components/Screens/Authentication/RegisterScreen'
+import LoginScreen from './src/components/Screens/Authentication/LoginScreen'
+import HomeScreen from './src/components/Screens/GlobalWrappers/HomeScreen'
 //- Molecules
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
-import AddPhotoScreen from './src/components/Screens/report/TakePhotoScreen'
-import BrowsePhotoScreen from './src/components/Screens/report/BrowsePhotoScreen'
-import CreateReportScreen from './src/components/Screens/report/CreateReportScreen'
+import AddPhotoScreen from './src/components/Screens/Report/TakePhotoScreen'
+import BrowsePhotoScreen from './src/components/Screens/Report/BrowsePhotoScreen'
+import CreateReportScreen from './src/components/Screens/Report/CreateReportScreen'
 
 // Nav config
 const Stack = createNativeStackNavigator()
 let persistor = persistStore(store)
 
 // Ignoring the "Long timer" warning for Android that is caused by long timer in firebase storage
-// LogBox.ignoreLogs(['Setting a timer'])
+if(Platform.OS !== 'web') {
+	LogBox.ignoreLogs(['Setting a timer'])
+}
 
 // Creating an additional element to wrap it in the AuthProvider as Expo is missing index.ts which would usually be the wrapepr
 const Index = () => {
