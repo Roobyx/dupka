@@ -1,13 +1,12 @@
 // Vendor
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from 'react-native'
 import { Center, Pressable, Text } from 'native-base'
 
 // Firebase
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { collection, addDoc  } from 'firebase/firestore'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 
-import { auth as FbAuth, db as FBdb } from '../../../../firebaseSetup'
+import { auth as FbAuth, } from '../../../../firebaseSetup'
 
 // Components
 // Atoms
@@ -20,7 +19,6 @@ import BasicTemplate from '../../Templates/BasicTemplate'
 
 const RegisterScreen: React.FC<Page> = ({navigation}) => {
 	const auth = FbAuth,
-	db = FBdb,
 	[state, setState] = useState({
 		email: '',
 		password: '',
@@ -31,17 +29,6 @@ const RegisterScreen: React.FC<Page> = ({navigation}) => {
 		// TODO: verify passwords match first
 		const { email, password } = state
 		const res = await createUserWithEmailAndPassword(auth, email, password)
-
-		try {
-			const docRef = await addDoc(collection(db, "users"), {
-				uid: res.user.uid,
-				email: state.email
-			})
-
-			console.log("Document written with ID: ", docRef.id)
-		} catch(e) {
-			console.log('Error in db write: ', e)
-		}
 	}
 
 	return (

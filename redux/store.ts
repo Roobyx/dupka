@@ -1,4 +1,5 @@
 // Vendor
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from '@reduxjs/toolkit/query/react'
 
@@ -20,7 +21,7 @@ import authSlice from "./features/auth/authSlice"
 const persistConfig = {
 	key: 'root',
 	version: 1,
-	storage,
+	storage: AsyncStorage,
 }
 
 const persistedReducer = persistReducer(persistConfig, authSlice)

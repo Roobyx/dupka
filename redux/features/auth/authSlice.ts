@@ -1,6 +1,5 @@
 import { createSlice, createSelector, PayloadAction, createDraftSafeSelector } from "@reduxjs/toolkit"
 import { RootState } from "../../store"
-import { User } from "@firebase/auth"
 
 type authState = {
 	user: any | null,
@@ -47,6 +46,11 @@ export const getFullUserData = createSelector(
 export const getUserEmail = createSelector(
 	selectSelf,
 	(state: RootState) => state.auth.user.email
+)
+
+export const getUserUid = createSelector(
+	selectSelf,
+	(state: RootState) => state.auth.user.uid
 )
 
 export const getLoggedState = createDraftSafeSelector(

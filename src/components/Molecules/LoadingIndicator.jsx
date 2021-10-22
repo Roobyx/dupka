@@ -1,14 +1,15 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { Box, Text, Center, isLoading, Button } from "native-base"
+import { Box, Text, Center, Spinner, Heading } from "native-base"
 
 const LoadingIndicator = () => {
 	return (
 		<Center height={'100%'} width={{base: '100%'}}>
 			<Box>
-				<Button isLoading variant="ghost">
+				<Spinner accessibilityLabel="Loading posts" />
+				<Heading color="primary.500" fontSize="md">
 					Loading
-				</Button>
+				</Heading>
 			</Box>
 		</Center>
 	)

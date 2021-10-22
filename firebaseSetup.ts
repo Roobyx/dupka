@@ -1,9 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"
+import { initializeFirestore } from "firebase/firestore"
+import { getStorage } from "firebase/storage"
 
 // Firebase config
 const firebaseConfig = {
+	databaseURL: process.env.FBC_dbUrl,
 	apiKey: process.env.FBC_apiKey,
 	authDomain: process.env.FBC_authDomain,
 	projectId: process.env.FBC_projectId,
@@ -14,7 +16,11 @@ const firebaseConfig = {
 }
 
 // Initialize the firebase sdk
-const firebaseApp = initializeApp(firebaseConfig)
-
+export const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth()
-export const db = getFirestore(firebaseApp)
+// Initializing the firestore to turn off the fetchstreams option as this improves the file upload
+export const db = initializeFirestore(firebaseApp, {
+	useFetchStreams: false,
+} as any)
+
+export const firebaseStorage = getStorage()

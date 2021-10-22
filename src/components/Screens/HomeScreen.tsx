@@ -1,6 +1,11 @@
-// React
+// Vendor
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+// import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 
 // Expo
 import * as Location from 'expo-location'
@@ -9,20 +14,20 @@ import { LocationObject } from 'expo-location'
 // Redux
 import { useAppSelector } from '../../../redux/features/hooks'
 
-// Others
-// import MapView from 'react-native-maps'
-import MapView, { Marker } from 'react-native-maps'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 // UI
 import { Box, Button, Fab, Flex, Icon, Row, Text } from 'native-base'
 
-// App
-import Ionicon from 'react-native-vector-icons/Ionicons'
-
+// Screens
+import AddPhotoScreen from './report/TakePhotoScreen'
+// Molecules
 import LoadingIndicator from '../Molecules/LoadingIndicator'
+import { ResponsiveValue } from 'native-base/lib/typescript/components/types'
+import { useFocusEffect, useIsFocused } from '@react-navigation/native'
+import ReportCTA from '../Molecules/ReportCTA'
 
 
 const Tab = createNativeStackNavigator()
+// const Tab = createNativeBottom()
 
 
 type Feed = {
@@ -30,9 +35,9 @@ type Feed = {
 	locationText: string
 }
 
-const HomeFeed = ({userEmail, locationText}: Feed) => {
+const HomeFeed = () => {
 	return (
-		<Box>
+		<Box flex={1}>
 			<Text> Home feed sub-screen </Text>
 		</Box>
 	)
@@ -83,7 +88,7 @@ const HomeMap = () => {
 	
 	return (
 		// TODO: Make sure lat/long is NOT undefined before rendring this
-		<Box  style={styles.container}>
+		<Box flex={1} style={styles.container}>
 
 			{
 				loading ? (
@@ -119,24 +124,21 @@ type Region = {
 
 
 const HomeScreen: React.FC<Page> = ({navigation}) => {
-	const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
-	console.log('Current Redux user: ', loggedInUserEmail)
+	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
+	const isFocused = useIsFocused()
 
-	
 	return (
-		<>
+		<Box flex={1}>
 			<Tab.Navigator>
 				<Tab.Screen name="Feed" options={{ headerShown: false }} component={HomeFeed} />
 				<Tab.Screen name="Map" options={{ headerShown: false }} component={HomeMap} />
 			</Tab.Navigator>
 
-			<Fab
-				position="absolute"
-				bg={'tertiary.800' }
-				size="md"
-				icon={<Icon color="white" as={<Ionicon name="flag" />} size="md" />}
-				onPress={() => {}}
-			/>
+			{
+				isFocused && (
+					<ReportCTA navigation={navigation} />
+				)
+			}
 
 			<Flex>
 				<Row>
@@ -144,7 +146,7 @@ const HomeScreen: React.FC<Page> = ({navigation}) => {
 					<Button w="50%" h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
 				</Row>
 			</Flex>
-		</>
+		</Box>
 	)
 }
 

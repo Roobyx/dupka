@@ -3,7 +3,10 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NativeBaseProvider, Pressable } from 'native-base'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Entypo'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { StyleSheet } from 'react-native'
+import { LogBox } from 'react-native'
 
 // Expo
 // import AppLoading from 'expo-app-loading'
@@ -27,17 +30,24 @@ import LoginScreen from './src/components/Screens/authentication/LoginScreen'
 import HomeScreen from './src/components/Screens/HomeScreen'
 //- Molecules
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
+import AddPhotoScreen from './src/components/Screens/report/TakePhotoScreen'
+import BrowsePhotoScreen from './src/components/Screens/report/BrowsePhotoScreen'
+import CreateReportScreen from './src/components/Screens/report/CreateReportScreen'
 
 // Nav config
 const Stack = createNativeStackNavigator()
 let persistor = persistStore(store)
+
+// Ignoring the "Long timer" warning for Android that is caused by long timer in firebase storage
+// LogBox.ignoreLogs(['Setting a timer'])
 
 // Creating an additional element to wrap it in the AuthProvider as Expo is missing index.ts which would usually be the wrapepr
 const Index = () => {
 	const dispatch = useAppDispatch(),
 			loaded = useAppSelector(getLoadingState),
 			loggedInState = useAppSelector(getLoggedState)
-	console.log('Logged on land ', loggedInState)
+
+			console.log('Logged on land ', loggedInState)
 
 
 	// Sign the user out on demand
@@ -58,7 +68,7 @@ const Index = () => {
 		{
 			loaded ? (
 				<NavigationContainer>
-					<Stack.Navigator>
+					<Stack.Navigator initialRouteName='Home'>
 						{ 
 							loggedInState ? (
 								<>
@@ -67,18 +77,20 @@ const Index = () => {
 										headerBackButtonMenuEnabled: false,
 											headerRight: () => (
 												<Pressable onPress={SignOut}>
-													<Icon name="person" size={20}/>
+													<Icon name="log-out" size={20}/>
 												</Pressable>
 											),
 										}}
 									/>
+									<Stack.Screen name="AddPhoto" component={AddPhotoScreen} options={{ headerShown: false }} />
+									<Stack.Screen name="BrowsePhoto" component={BrowsePhotoScreen} options={{ headerShown: false }} />
+									<Stack.Screen name="CreateReport" component={CreateReportScreen} />
 								</>
 							) : (
 								<>
 									<Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
-									
 								</>
 							)
 						}
@@ -94,15 +106,25 @@ const Index = () => {
 	)
 }
 
-// The app itself
+// The app itself wrapped in providers
 export default function App() {
 	return (
 		<Provider store={store}>
 			 <PersistGate loading={null} persistor={persistor}>
-				<NativeBaseProvider>
-					<Index />
-				</NativeBaseProvider>
+				<SafeAreaProvider>
+					<NativeBaseProvider>
+						<Index />
+					</NativeBaseProvider>
+				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>
 	)
 }
+
+
+const styles = StyleSheet.create({
+	addPhotoContainer: {
+		zIndex: 999999,
+		flex: 1
+	}
+})
