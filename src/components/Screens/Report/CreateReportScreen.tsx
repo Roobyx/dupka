@@ -4,7 +4,6 @@ import { StyleSheet } from 'react-native'
 import { Box, Center, Image, Button} from 'native-base'
 import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
-import { Asset } from 'expo-asset'
 import * as ImageManipulator from 'expo-image-manipulator'
 import * as FileSystem from 'expo-file-system'
 
@@ -16,6 +15,7 @@ import { collection, addDoc, serverTimestamp  } from 'firebase/firestore'
 import { db as FBDB, firebaseStorage } from '../../../../firebaseSetup'
 import { ref } from "firebase/storage"
 import { useAppSelector } from '../../../../redux/features/hooks'
+import LoadingIndicator from '../../Molecules/LoadingIndicator'
 
 type CreateReportComponent = {
 	route: any
@@ -25,6 +25,8 @@ type CreateReportComponent = {
 const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	const userUid = useAppSelector(getUserUid)
 	const db = FBDB
+	const [sendingReport, setSendingReport] = useState(false)
+	// TODO: Unneded state logic - merge it into one
 	const [originalPhotoURI, setOriginalPhotoURI] = useState<string>(route.params.photoPath)
 	const [crunchedPhoto, setCrunchedPhoto] = useState<any>(originalPhotoURI)
 
@@ -85,6 +87,8 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// Utility to build up and upload the report
 	const uploadReport = async (downloadUrl: string) => {
 		console.log('Running uploadReport')
+		// Set the loading logic to true
+		setSendingReport(true)
 
 		try {
 			const docRef = await addDoc(collection(db, "reports"), {
@@ -92,7 +96,8 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				reportImage: downloadUrl,
 				timestamp: serverTimestamp()
 			})
-
+			// Set the loading back to false
+			setSendingReport(false)
 			console.log("Document written with ID: ", docRef.id)
 			navigation.popToTop({reportStatus: 'success'})
 		} catch(e) {
@@ -103,7 +108,6 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// Compress the photo to save bandwith on the server
 	const crunchPhoto = async () => {
 		console.log('Initial size: ', await FileSystem.getInfoAsync(originalPhotoURI, {size: true}))
-
 		const manipResult = await ImageManipulator.manipulateAsync(
 			originalPhotoURI,
 			[],
@@ -117,18 +121,26 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 
 	return (
 		<Box bg='black' flex={1} style={styles.container}>
-			{/* TODO: Export to a comp and add to take and browse photos */}
-			<Box flex={1}>
-				<Image style={styles.photoPreview}
-					source={{
-						uri: originalPhotoURI,
-					}}
-					alt='Latest image'
-				/>
-			</Box>
+			{
+				sendingReport ? (
+					<LoadingIndicator />
+				) : (
+					<>
+						{/* TODO: Export to a comp and add to take and browse photos */}
+						<Box flex={1}>
+							<Image style={styles.photoPreview}
+								source={{
+									uri: originalPhotoURI,
+								}}
+								alt='Latest image'
+							/>
+						</Box>
 
-			{/* <Button onPress={saveReport}> Save report </Button> */}
-			<Button onPress={() => uploadReport}> Fake report </Button>
+						{/* <Button onPress={saveReport}> Save report </Button> */}
+						<Button onPress={() => uploadReport(crunchedPhoto)}> Fake report </Button>
+					</>
+				)
+			}
 		</Box>
 	)
 }
