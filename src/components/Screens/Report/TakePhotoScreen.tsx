@@ -9,6 +9,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 	const [hasPermission, setHasPermission] = useState<null | string | boolean>(null)
 	const [camera, setCamera] = useState<Camera | null>(null)
 	const [photoPath, setPhotoPath] = useState<string | undefined>(undefined)
+	const [photoExif, setPhotoExif] = useState<string | undefined>(undefined)
 	const [type, setType] = useState(Camera.Constants.Type.back)
 	const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off)
 
@@ -33,8 +34,9 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 	const takePhoto = async () => {
 		if(camera) {
-			const data = await camera.takePictureAsync()
+			const data = await camera.takePictureAsync({skipProcessing: true, exif: true})
 			setPhotoPath(data.uri)
+			setPhotoExif(data.exif)
 		}
 	}
 
@@ -109,7 +111,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 							<Pressable
 								w='20'
-								onPress={() => navigation.navigate('CreateReport', { photoPath })}>
+								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'camera' })}>
 
 								<Center>
 									<Text style={styles.text}> Save </Text>

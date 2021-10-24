@@ -28,11 +28,12 @@ import LandingScreen from './src/components/Screens/GlobalWrappers/LandingScreen
 import RegisterScreen from './src/components/Screens/Authentication/RegisterScreen'
 import LoginScreen from './src/components/Screens/Authentication/LoginScreen'
 import HomeScreen from './src/components/Screens/GlobalWrappers/HomeScreen'
-//- Molecules
-import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
 import AddPhotoScreen from './src/components/Screens/Report/TakePhotoScreen'
 import BrowsePhotoScreen from './src/components/Screens/Report/BrowsePhotoScreen'
 import CreateReportScreen from './src/components/Screens/Report/CreateReportScreen'
+//- Molecules
+import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
+
 
 // Nav config
 const Stack = createNativeStackNavigator()

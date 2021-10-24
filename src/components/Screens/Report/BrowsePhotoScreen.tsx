@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker'
 
 const BrowsePhotoScreen = ({navigation}: NavElement) => {
 	const [photoPath, setPhotoPath] = useState<string | null>(null)
+	const [photoExif, setPhotoExif] = useState<{ [key: string]: any; } | undefined>(undefined)
 
 	useEffect(() => {
 		(async () => {
@@ -31,10 +32,12 @@ const BrowsePhotoScreen = ({navigation}: NavElement) => {
 			allowsEditing: true,
 			aspect: [1, 1],
 			quality: 1,
+			exif: true
 		})
 
 		if (!result.cancelled) {
 			setPhotoPath(result.uri)
+			setPhotoExif(result.exif)
 		} else {
 			navigation.goBack()
 		}
@@ -67,7 +70,7 @@ const BrowsePhotoScreen = ({navigation}: NavElement) => {
 
 							<Pressable
 								w='20'
-								onPress={() => navigation.navigate('CreateReport', { photoPath })}>
+								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'gallery' })}>
 
 								<Center>
 									<Text style={styles.text}> Save </Text>
