@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/features/hooks'
 
 // RN Maps
 // import { useFocusEffect, useIsFocused } from '@react-navigation/native'
-import MapView, { Heatmap, Marker } from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE, Heatmap, Marker } from 'react-native-maps'
 
 // Custom
 // Atoms
@@ -38,7 +38,7 @@ const Map = () => {
 	const [location, setLocation] = useState<LocationObject>()
 	const [region, setRegion] = useState<Region>()
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
-	const [mapMode, setMapMode] = useState<MapMode>({mode: 'heatmap'})
+	const [mapMode, setMapMode] = useState<MapMode>({mode: 'default'})
 	const isFocused = useIsFocused()
 
 
@@ -102,7 +102,9 @@ const Map = () => {
 						errorMsg !== null ? (
 							<Error> errorMsg </Error>
 						) : (
-							<MapView style={styles.map}
+							<MapView 
+								provider={ PROVIDER_GOOGLE }
+								style={styles.map}
 								region={region}
 							> 
 								{/* {
@@ -129,22 +131,33 @@ const Map = () => {
 									)
 								}
 							</MapView>
+							
 						)
 					) : (
-						<Heatmap points={
-							allReports.map( (report) => {
-								return ({
-									latitude: report.location.coords.latitude, 
-									longitude: report.location.coords.longitude,
-									weight: 1
-								})
-							} )
-						} />
+						<>
+							<MapView 
+								provider={ PROVIDER_GOOGLE }
+								style={styles.map}
+								region={region}
+							>
+								<Heatmap 
+									points={
+										allReports.map( (report) => {
+											return ({
+												latitude: report.location.coords.latitude, 
+												longitude: report.location.coords.longitude,
+												weight: 1
+											})
+										})
+									}
+								/>
+							</MapView>
+						</>
 					)}
 				
 					{
 						isFocused && (
-							<FabMenu 
+							<FabMenu
 								fab={mapToggleFab}
 								actionSheetTitle="Which photo would you like to use?"
 								actionSheetItems={[
