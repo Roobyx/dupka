@@ -1,14 +1,17 @@
 // Vendor
 import React, { useEffect, useState } from 'react'
 import { Platform, StyleSheet } from 'react-native'
-import { Box, Image, Button} from 'native-base'
+import { Box, Image, Button, Center, Text, Heading} from 'native-base'
 import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
-import * as ImageManipulator from 'expo-image-manipulator'
-import * as FileSystem from 'expo-file-system'
 
 // Redux
 import { getUserUid } from '../../../../redux/features/auth/authSlice'
+
+// Expo
+import * as ImageManipulator from 'expo-image-manipulator'
+import { Action, ActionResize } from 'expo-image-manipulator'
+// import * as FileSystem from 'expo-file-system'
 
 // Firebase
 import { collection, addDoc, serverTimestamp  } from 'firebase/firestore'
@@ -20,7 +23,7 @@ import { useAppSelector } from '../../../../redux/features/hooks'
 //- Helpers
 import { getFullLocationInfo, RichLocationObject } from '../../../helpers/location'
 import LoadingIndicator from '../../Molecules/LoadingIndicator'
-import { Action, ActionResize } from 'expo-image-manipulator'
+import StarRating from 'react-native-star-rating-widget'
 
 //- Components
 //-- Molecules
@@ -40,6 +43,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// TODO: Unneded state logic - merge it into one
 	const [originalPhotoURI, setOriginalPhotoURI] = useState<string>(route.params.photoPath)
 	const [crunchedPhoto, setCrunchedPhoto] = useState<string>(originalPhotoURI)
+	const [rating, setRating] = useState(0)
 
 	// Crunch the photo upon landing on the screen
 	useEffect(() => {
@@ -123,6 +127,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				reportImage: downloadUrl,
 				location: richLocation?.location,
 				address: richLocation?.address,
+				rating: rating,
 				timestamp: serverTimestamp()
 			})
 
@@ -224,13 +229,28 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 					<LoadingIndicator action='Uploading' progress={uploadProgress} />
 				) : (
 					<>
+						<Heading>
+							Crete report:
+						</Heading>
 						{/* TODO: Export to a comp and add to take and browse photos */}
-						<Box flex={1}>
+						<Center flex={2}>
 							<Image style={styles.photoPreview}
 								source={{
 									uri: originalPhotoURI,
 								}}
 								alt='Latest image'
+							/>
+						</Center>
+
+						<Box flex={1}>
+							<Text>
+								Rate the severity:
+							</Text>
+
+							{/* TODO: Build a star rating comp and replace the external one */}
+							<StarRating
+								rating={rating}
+								onChange={setRating}
 							/>
 						</Box>
 

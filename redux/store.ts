@@ -15,8 +15,9 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-// Custom
+// Slices
 import authSlice from "./features/auth/authSlice"
+import reportsSlice from "./features/reports/reportsSlice"
 
 const persistConfig = {
 	key: 'root',
@@ -24,11 +25,13 @@ const persistConfig = {
 	storage: AsyncStorage,
 }
 
-const persistedReducer = persistReducer(persistConfig, authSlice)
+const persistedAuthReducer = persistReducer(persistConfig, authSlice)
+const persistedReportsReducer = persistReducer(persistConfig, reportsSlice)
 
 export const store = configureStore({
 	reducer: {
-		auth: persistedReducer
+		auth: persistedAuthReducer,
+		reports: persistedReportsReducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

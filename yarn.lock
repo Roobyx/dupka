@@ -6831,6 +6831,11 @@ react-native-screens@~3.4.0:
   dependencies:
     warn-once "^0.1.0"
 
+react-native-star-rating-widget@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-star-rating-widget/-/react-native-star-rating-widget-1.2.0.tgz#c36e7177b9e79fcd9ac5daac1b0f736f5ecdfda1"
+  integrity sha512-SfaUFaElJtTmNMn/kqYl2h/QTiDGikvE0K4XzrfNjndTMUdM/30+jt+HpaZpUufAKsCGRo9rP/Q+x1m6guYIBg==
+
 react-native-svg@^12.1.1:
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.1.1.tgz#5f292410b8bcc07bbc52b2da7ceb22caf5bcaaee"
