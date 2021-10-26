@@ -128,6 +128,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				location: richLocation?.location,
 				address: richLocation?.address,
 				rating: rating,
+				approved: false,
 				timestamp: serverTimestamp()
 			})
 

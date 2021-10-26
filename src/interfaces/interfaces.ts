@@ -13,6 +13,7 @@ export interface Report {
 	location: LocationObject,
 	rating: number,
 	reportImage: string,
+	approved: boolean,
 	timestamp: Timestamp,
 	uid: string
 }

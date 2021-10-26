@@ -56,15 +56,17 @@ const Feed = () => {
 				allReports.map(
 					(report, index) => {
 						return (
-							<Center key={index} p='30'>
-								<Heading> {report.address} </Heading>
-								
-								<Image source={{
-									uri: report.reportImage
-								}} alt={report.address} size='2xl' resizeMode='contain' />
-
-								{/* <Text> {()=> {new Date(report.timestamp).toLocaleString()}} </Text> */}
-							</Center>
+							report.approved && (
+								<Center key={index} p='30'>
+									<Heading> {report.address} </Heading>
+									
+									<Image source={{
+										uri: report.reportImage
+									}} alt={report.address} size='2xl' resizeMode='contain' />
+	
+									{/* <Text> {()=> {new Date(report.timestamp).toLocaleString()}} </Text> */}
+								</Center>
+							)
 						)
 					}
 				)
