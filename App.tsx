@@ -18,7 +18,7 @@ import store from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 import { useAppDispatch, useAppSelector } from './redux/features/hooks'
-import { getLoadingState, getLoggedState, logUserOut } from './redux/features/auth/authSlice'
+import { checkIsAdmin, getLoadingState, getLoggedState, logUserOut } from './redux/features/auth/authSlice'
 
 import { auth } from './firebaseSetup'
 
@@ -49,9 +49,10 @@ const Index = () => {
 	const dispatch = useAppDispatch(),
 			loaded = useAppSelector(getLoadingState),
 			loggedInState = useAppSelector(getLoggedState)
+	console.log('Logged on land ', loggedInState)
 
-			console.log('Logged on land ', loggedInState)
-
+	const isAdmin = useAppSelector(checkIsAdmin)
+	console.log('Is admin: ', isAdmin)
 
 	// Sign the user out on demand
 	// Clear the local state

@@ -4,6 +4,7 @@ import { Button, Center, Pressable, Text } from "native-base"
 
 // Templates
 import BasicTemplate from '../../Templates/BasicTemplate'
+import { Page } from '../../../interfaces/interfaces'
 
 const Landing: React.FC<Page> = ({navigation}) => {
 	return (

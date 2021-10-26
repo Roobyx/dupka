@@ -129,6 +129,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				address: richLocation?.address,
 				rating: rating,
 				approved: false,
+				faces: route.params.faceDetected,
 				timestamp: serverTimestamp()
 			})
 

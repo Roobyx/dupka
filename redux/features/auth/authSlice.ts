@@ -23,6 +23,7 @@ export const authSlice = createSlice({
 		setActiveUser: (state, action: PayloadAction<any | null>) => {
 			state.user = action.payload
 			state.loggedIn = true
+
 			console.log('Current user set to: ', state.user)
 			console.log('Current auth login state: ', state.loggedIn)
 		},
@@ -63,4 +64,9 @@ export const getLoadingState = createDraftSafeSelector(
 	(state: RootState) => state.auth.loading
 )
 
+export const checkIsAdmin = createDraftSafeSelector(
+	selectSelf,
+	(state: RootState) => state.auth.user.uid === process.env.CFG_adminUID
+
+)
 export default authSlice.reducer

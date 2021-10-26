@@ -1,9 +1,44 @@
 // Vendor
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native'
-import { Camera } from 'expo-camera'
+import { Camera, FaceDetectionResult } from 'expo-camera'
 import { Box, Center, HStack, Circle, Pressable, Image } from 'native-base'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+// Expo
+import * as FaceDetector from 'expo-face-detector'
+
+// {
+// 	"faceBox": Object {
+// 	  "origin": Object {
+// 		"x": 18.818181818181813,
+// 		"y": 189.85909090909092,
+// 	  },
+// 	  "size": Object {
+// 		"height": 221.50227272727275,
+// 		"width": 227.18181818181816,
+// 	  },
+// 	},
+// 	"faceDetected": true,
+//   }
+
+
+type TFaceDetectionObject = {
+	faceBox?: {
+		origin: {
+			x: number,
+			y: number,
+		},
+		size: {
+			height: number,
+			width: number,
+		},
+	},
+	pictureTaken?: boolean,
+	faceDetected: boolean,
+}
+
+
 
 const TakePhotoScreen = ({navigation}: any) => {
 	const [hasPermission, setHasPermission] = useState<null | string | boolean>(null)
@@ -12,6 +47,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 	const [photoExif, setPhotoExif] = useState<string | undefined>(undefined)
 	const [type, setType] = useState(Camera.Constants.Type.back)
 	const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off)
+	const [faceDetected, setFaceDetected] = useState<TFaceDetectionObject>({faceDetected: false})
 
 	useEffect(() => {
 		(async () => {
@@ -46,6 +82,24 @@ const TakePhotoScreen = ({navigation}: any) => {
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>
 	}
+
+
+	// Face detection
+	const handleFaceDetection = ({faces}: {faces: any[]}) => {
+		console.log('Face detected:')
+
+		if (faces.length === 1){ // detect a face
+			setFaceDetected({
+				faceDetected: true, // variable state to hold face is detected
+				faceBox: faces[0].bounds // variable to hold face location
+			})
+		} else { // no faces detected
+			setFaceDetected({faceDetected: false})
+		}
+
+		console.log('---> ', faceDetected)
+	}
+
 	return (
 		<Box flex={1} bg={'black'}>
 			<HStack h="20%" alignItems="center" style={styles.actionsRow}>
@@ -91,7 +145,49 @@ const TakePhotoScreen = ({navigation}: any) => {
 					</Box>
 				) : (
 					<Box style={styles.container}>
-						<Camera style={styles.camera} ref={ref => setCamera(ref)} type={type} ratio={'4:3'} flashMode={flashMode}/>
+						<Camera 
+							style={styles.camera} 
+							ref={ref => setCamera(ref)} 
+							type={type} 
+							ratio={'4:3'} 
+							flashMode={flashMode}
+							
+							onFacesDetected={handleFaceDetection}
+							// onFaceDetectionError={this.handleFaceDetectionError}
+							faceDetectorSettings={{
+								mode: FaceDetector.Constants.Mode.accurate,
+								detectLandmarks: FaceDetector.Constants.Landmarks.all,
+								runClassifications: FaceDetector.Constants.Classifications.none,
+							}}
+
+						/>
+
+						{faceDetected.faceDetected && (
+							<>
+								<Text
+									style={{
+										position: 'absolute'
+									}}
+								> 
+									Please avoid people in the photo
+								</Text>
+								<Box
+									style={{
+										position: 'absolute',
+										backgroundColor: 'transparent',
+										flexDirection: 'row',
+										// width: faceDetected.faceBox ? faceDetected.faceBox.size.width : '100%',
+										// height: faceDetected.faceBox ? faceDetected.faceBox.size.height : '100%',
+										// top: faceDetected.faceBox ? faceDetected.faceBox.origin.y : '0%',
+										// left: faceDetected.faceBox ? faceDetected.faceBox.origin.x : '0%',
+										// borderColor: '#33FF33',
+										borderWidth: 5,
+										borderStyle: 'dashed',
+										display: faceDetected.faceDetected && !faceDetected.pictureTaken ? 'flex' : 'none',
+									}}>
+								</Box>
+							</>
+						)}
 					</Box>
 				)
 			}
@@ -111,7 +207,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 							<Pressable
 								w='20'
-								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'camera' })}>
+								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'camera', faceDetected })}>
 
 								<Center>
 									<Text style={styles.text}> Save </Text>
