@@ -37,6 +37,7 @@ Each of the features is developped and working for both iOS and Android
 ## Feature Roadmap:
 - Annonymus firebase login
 - Provider logins (Fb/google)
+- Face detection on storage photos
 - Face blurring before upload
 - Feed filters
 - Feed search
