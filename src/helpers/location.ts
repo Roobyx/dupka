@@ -8,11 +8,13 @@ export const getLocation = async (): Promise<LocationObject | null> => {
 	let { status } = await Location.requestForegroundPermissionsAsync()
 
 	if (status !== 'granted') {
+		alert('No location access')
 		return null
 	}
 
 	let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
 
+	alert(location.coords.longitude + ' / ' + location.coords.latitude)
 	return location
 }
 
@@ -55,7 +57,7 @@ export const getAddress = async (): Promise<string> => {
 		})
 
 		for (let item of response) {
-			let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`
+			let address = `${item.street}, ${item.name}, ${item.city}, ${item.postalCode}`
 
 			currentAddress = address
 		}

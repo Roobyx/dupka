@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet } from 'react-native'
-import { Box, Text } from 'native-base'
+import { Box, Text, Image } from 'native-base'
 import { Icon, IFabProps } from 'native-base'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 
@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/features/hooks'
 
 // RN Maps
 // import { useFocusEffect, useIsFocused } from '@react-navigation/native'
-import MapView, { PROVIDER_GOOGLE, Heatmap, Marker } from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE, Heatmap, Marker, WeightedLatLng, Callout } from 'react-native-maps'
 
 // Custom
 // Atoms
@@ -71,7 +71,7 @@ const Map = () => {
 		return () => {}
 	}, [])
 
-	const allReports: Report[] = useAppSelector(getAllReports)
+	let allReports: Report[] = useAppSelector(getAllReports)
 
 	const toggleMapMode = (newMode: MapMode) => {
 		setMapMode(newMode)
@@ -87,6 +87,14 @@ const Map = () => {
 		size: "md",
 		icon: fabIcon
 	}
+
+	const approvedReports: Report[] = allReports.filter( report => {
+		return report.status === 'approved'
+	})
+
+
+	// console.log('All: ', allReports.length)
+	// console.log('Approved Only: ', approvedReports.length)
 
 	return (
 		// TODO: Make sure lat/long is NOT undefined before rendring this
@@ -119,15 +127,46 @@ const Map = () => {
 		
 		
 								{
-									allReports && (
-										allReports.map((report, index) => (
-											<Marker
-												key={index}
-												coordinate={{ latitude: report.location.coords.latitude, longitude: report.location.coords.longitude }}
-												title='Title'
-												description='Desc'
-											/>
-										))
+									approvedReports && (
+										approvedReports.map((report, index) => {
+											// console.log('report: ', { 
+											// 	latitude: report.location.coords.latitude, 
+											// 	longitude: report.location.coords.longitude 
+											// })
+
+											{/* TODO: Custom tooltip */}
+												{/* <Marker
+													key={index}
+													coordinate={{ 
+														latitude: report.location.coords.latitude, 
+														longitude: report.location.coords.longitude 
+													}}
+													title={report.address}
+													description={`Rating: ${report.rating}`}
+												>
+													
+													 <Callout>
+														<Image source={{
+																uri: report.reportImage
+															}}
+															alt='alt'
+														/>
+														<Text> {report.address} </Text>
+													</Callout> 
+												</Marker> */}
+
+											return (
+												<Marker
+													key={index}
+													coordinate={{ 
+														latitude: report.location.coords.latitude, 
+														longitude: report.location.coords.longitude 
+													}}
+													title={report.address}
+													description={`Rating: ${report.rating}`}
+												/>
+											)
+										})
 									)
 								}
 							</MapView>
@@ -142,11 +181,11 @@ const Map = () => {
 							>
 								<Heatmap 
 									points={
-										allReports.map( (report) => {
+										approvedReports.map( (report) => {
 											return ({
 												latitude: report.location.coords.latitude, 
 												longitude: report.location.coords.longitude,
-												weight: 1
+												weight: report.rating
 											})
 										})
 									}

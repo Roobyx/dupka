@@ -47,15 +47,15 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 
 	// Crunch the photo upon landing on the screen
 	useEffect(() => {
-		(async () => {
-			let loc = await getFullLocationInfo()
-			setRichLocation(loc)
-			// console.log(loc)
-		})()
-
 		crunchPhoto()
+		updateLoc()
 	}, [])
 	
+
+	const updateLoc = async () => {
+		let loc = await getFullLocationInfo()
+		setRichLocation(loc)
+	}
 
 	// Bundle the report upload
 	const saveReport = async () => {
@@ -119,7 +119,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// Utility to build up and upload the report
 	const uploadReport = async (downloadUrl: string) => {
 		console.log('Running uploadReport')
-
+		updateLoc()
 		// TODO: Add report templates
 		try {
 			const docRef = await addDoc(collection(db, "reports"), {
@@ -256,8 +256,9 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 						</Box>
 
-						<Button onPress={saveReport}> Save report </Button>
+						{/* <Button onPress={saveReport}> Save report </Button> */}
 						{/* <Button onPress={() => uploadReport(crunchedPhoto)}> Fake report </Button> */}
+						<Button onPress={() => alert(richLocation?.location?.coords.latitude + ' ' + richLocation?.location?.coords.longitude)}> Fake report </Button>
 					</>
 				)
 			}

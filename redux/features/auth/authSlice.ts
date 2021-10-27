@@ -67,8 +67,9 @@ export const getLoadingState = createDraftSafeSelector(
 export const checkIsAdmin = createDraftSafeSelector(
 	selectSelf,
 	(state: RootState) => {
-		console.log('admin uid env: ', process.env.CFG_adminUID)
-		return state.auth.user.uid === 'G9AyamPy6PPRJG3u13XvPLNkK2D3'
+		// console.log('admin uid env: ', process.env.CFG_adminUID)
+		const adminUID = process.env.CFG_adminUID
+		return state.auth.user.uid === adminUID
 	}
 
 )

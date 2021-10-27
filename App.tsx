@@ -20,7 +20,7 @@ import { persistStore } from 'redux-persist'
 import { useAppDispatch, useAppSelector } from './redux/features/hooks'
 import { checkIsAdmin, getLoadingState, getLoggedState, logUserOut } from './redux/features/auth/authSlice'
 
-import { auth, reportsCollectionRef } from './firebaseSetup'
+import { auth } from './firebaseSetup'
 
 // Components
 //- Screens
@@ -35,7 +35,6 @@ import CreateReportScreen from './src/components/Screens/Report/CreateReportScre
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
 import AdminFeed from './src/components/Organisms/AdminFeed'
 import { getUnnaprovedReportsCount, setReports } from './redux/features/reports/reportsSlice'
-import { getDocs } from 'firebase/firestore'
 import { fetchAllReports } from './redux/features/reports/reportOperations'
 
 // Nav config
