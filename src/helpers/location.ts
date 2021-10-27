@@ -14,7 +14,7 @@ export const getLocation = async (): Promise<LocationObject | null> => {
 
 	let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
 
-	alert(location.coords.longitude + ' / ' + location.coords.latitude)
+	// alert(location.coords.longitude + ' / ' + location.coords.latitude)
 	return location
 }
 
