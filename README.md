@@ -48,3 +48,4 @@ Each of the features is developped and working for both iOS and Android
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch
+- Location is taken only once and is not bein properly updated - all reports are using the same location
