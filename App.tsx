@@ -1,8 +1,8 @@
 // Vendor
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NativeBaseProvider, Pressable } from 'native-base'
+import { Badge, Center, HStack, NativeBaseProvider, Pressable, Text } from 'native-base'
 import Icon from 'react-native-vector-icons/Entypo'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Platform, StyleSheet } from 'react-native'
@@ -20,7 +20,7 @@ import { persistStore } from 'redux-persist'
 import { useAppDispatch, useAppSelector } from './redux/features/hooks'
 import { checkIsAdmin, getLoadingState, getLoggedState, logUserOut } from './redux/features/auth/authSlice'
 
-import { auth } from './firebaseSetup'
+import { auth, reportsCollectionRef } from './firebaseSetup'
 
 // Components
 //- Screens
@@ -33,7 +33,10 @@ import BrowsePhotoScreen from './src/components/Screens/Report/BrowsePhotoScreen
 import CreateReportScreen from './src/components/Screens/Report/CreateReportScreen'
 //- Molecules
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
-
+import AdminFeed from './src/components/Organisms/AdminFeed'
+import { getUnnaprovedReportsCount, setReports } from './redux/features/reports/reportsSlice'
+import { getDocs } from 'firebase/firestore'
+import { fetchAllReports } from './redux/features/reports/reportOperations'
 
 // Nav config
 const Stack = createNativeStackNavigator()
@@ -54,6 +57,24 @@ const Index = () => {
 	const isAdmin = useAppSelector(checkIsAdmin)
 	console.log('Is admin: ', isAdmin)
 
+		
+
+	
+	// Get All reports on start
+	useEffect(() => {
+		(async () => {
+			const fetchedReports = await fetchAllReports()
+			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+			dispatch(setReports(parsedReports))
+		})()
+	}, [])
+
+	
+
+	// Count the pending ones
+	const unapprovedReprotsCount = useAppSelector(getUnnaprovedReportsCount)
+
+
 	// Sign the user out on demand
 	// Clear the local state
 	// Cleare Redux state
@@ -67,6 +88,11 @@ const Index = () => {
 		console.log('Logged out')
 	}
 
+	const NaviageAdminFeed = (navigation: any) => {
+		navigation.navigate('AdminFeed')
+	}
+
+
 	return (
 		<>
 		{
@@ -76,19 +102,47 @@ const Index = () => {
 						{ 
 							loggedInState ? (
 								<>
-									<Stack.Screen name="Home" component={HomeScreen} options={{
+									<Stack.Screen name="Home" component={HomeScreen} options={({ navigation, route }) => ({
 										headerBackVisible: false,
 										headerBackButtonMenuEnabled: false,
-											headerRight: () => (
-												<Pressable onPress={SignOut}>
-													<Icon name="log-out" size={20}/>
-												</Pressable>
-											),
-										}}
+											headerRight: () => {
+												return (
+													<>
+														{isAdmin && (
+															<Pressable px='4' onPress={() => navigation.navigate('AdminFeed')}>
+																<HStack>
+																	<Badge colorScheme="info"
+																			rounded="999px"
+																			zIndex={1}
+																			mr={2}
+																			variant="outline"
+																			alignSelf="flex-end"
+																			_text={{
+																				fontSize: 6,
+																			}}
+																	>
+																		<Text> {unapprovedReprotsCount} </Text>
+																	</Badge>
+
+																	<Icon name="inbox" size={24}/>
+																</HStack>
+															</Pressable>
+														)}
+
+														<Pressable onPress={SignOut}>
+															<Icon name="log-out" size={20}/>
+														</Pressable>
+													</>
+											)},
+										})}
 									/>
 									<Stack.Screen name="AddPhoto" component={AddPhotoScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="BrowsePhoto" component={BrowsePhotoScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="CreateReport" component={CreateReportScreen} />
+
+									{
+										isAdmin &&  <Stack.Screen name="AdminFeed" component={AdminFeed} />
+									}
 								</>
 							) : (
 								<>
@@ -127,8 +181,5 @@ export default function App() {
 
 
 const styles = StyleSheet.create({
-	addPhotoContainer: {
-		zIndex: 999999,
-		flex: 1
-	}
+
 })

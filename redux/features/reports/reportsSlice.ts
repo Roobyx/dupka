@@ -1,4 +1,4 @@
-import { createSlice, createSelector, PayloadAction, createDraftSafeSelector } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, createDraftSafeSelector } from "@reduxjs/toolkit"
 import { RootState } from "../../store"
 import { Report } from '../../../src/interfaces/interfaces'
 
@@ -24,29 +24,26 @@ export const { setReports } = reportsSlice.actions
 
 const selectSelf = (state: RootState) => state
 
-export const getAllReports = createSelector(
+export const getAllReports = createDraftSafeSelector(
 	selectSelf,
-	state => state.reports.allReports
+	state => {
+		return state.reports.allReports
+	}
 )
 
-// export const getUserEmail = createSelector(
-// 	selectSelf,
-// 	(state: RootState) => state.auth.user.email
-// )
+export const getUnnaprovedReportsCount = createDraftSafeSelector(
+	selectSelf,
+	state => {
+		let unapproved = 0
 
-// export const getUserUid = createSelector(
-// 	selectSelf,
-// 	(state: RootState) => state.auth.user.uid
-// )
+		state.reports.allReports.forEach((report: Report) => {
+			if (report.status === 'pending') {
+				unapproved++
+			}
+		})
 
-// export const getLoggedState = createDraftSafeSelector(
-// 	selectSelf,
-// 	(state: RootState) => state.auth.loggedIn
-// )
-
-// export const getLoadingState = createDraftSafeSelector(
-// 	selectSelf,
-// 	(state: RootState) => state.auth.loading
-// )
+		return unapproved
+	}
+)
 
 export default reportsSlice.reducer

@@ -1,37 +1,22 @@
 // Vendor
-import React, { useEffect, useState } from 'react'
-import { Dimensions, StyleSheet } from 'react-native'
-// import { SafeAreaView } from 'react-native-safe-area-context'
+import React from 'react'
+import { StyleSheet } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Icon, IFabProps } from 'native-base'
 // Expo
-import { useFocusEffect, useIsFocused } from '@react-navigation/native'
+import { useIsFocused } from '@react-navigation/native'
 
-// Redux
-// import { useAppSelector } from '../../../../redux/features/hooks'
-
-// Firebse
-// import { reportsCollectionRef } from '../../../../firebaseSetup'
-// import { DocumentData, getDocs } from '@firebase/firestore'
 
 // UI
 import { Box, Button, Flex, Row } from 'native-base'
 
-// Custom
-//- Screens
-// import AddPhotoScreen from '../Report/TakePhotoScreen'
-
-//- Molecules
-// import { ResponsiveValue } from 'native-base/lib/typescript/components/types'
-
 //- Organisms
 import Feed from '../../Organisms/Feed'
 import Map from '../../Organisms/Map'
-// import ReportCTA from '../../Organisms/ReportCTA'
 
 //- Types & Interfaces
-import { Page } from '../../../interfaces/interfaces'
+import { Screen } from '../../../interfaces/interfaces'
 import { TActionSheetItem } from '../../../interfaces/types'
 import FabMenu from '../../Molecules/FabMenu'
 
@@ -40,7 +25,7 @@ import FabMenu from '../../Molecules/FabMenu'
 const Tab = createNativeStackNavigator()
 // const Tab = createNativeBottom()
 
-const HomeScreen: React.FC<Page> = ({navigation}) => {
+const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
 	const isFocused = useIsFocused()
 

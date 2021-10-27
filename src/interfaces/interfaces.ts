@@ -3,19 +3,19 @@ import { Timestamp } from "firebase/firestore";
 import { IFabProps } from "native-base/lib/typescript/components/composites/Fab/types";
 import { TActionSheetItem } from "./types";
 
-export interface Page {
+export interface Screen {
 	navigation?: any,
 	route?: any
 }
 
 export interface Report {
+	reportId: string,
 	address: string,
 	location: LocationObject,
 	rating: number,
 	reportImage: string,
-	approved: boolean,
-	timestamp: Timestamp,
-	uid: string
+	status: 'approved' | 'pending' | 'rejected',
+	timestamp: Timestamp
 }
 
 export interface IFabMenu {

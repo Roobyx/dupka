@@ -15,8 +15,9 @@ import Error from '../../Atoms/Error'
 
 // Templates
 import BasicTemplate from '../../Templates/BasicTemplate'
+import { Screen } from '../../../interfaces/interfaces'
 
-const LoginScreen: React.FC<Page> = ({navigation}) => {
+const LoginScreen: React.FC<Screen> = ({navigation}) => {
 	const auth = getAuth()
 	const dispatch = useAppDispatch()
 

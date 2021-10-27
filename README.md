@@ -42,3 +42,9 @@ Each of the features is developped and working for both iOS and Android
 - Feed filters
 - Feed search
 - Report templates
+- Personal feed
+- Skip admin approval request on proper reports
+- Notifications for reports that await admin approval
+
+## Known issues
+- Map type switch actionsheet does not close itself on map switch

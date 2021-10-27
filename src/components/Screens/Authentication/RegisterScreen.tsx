@@ -14,10 +14,11 @@ import Input from '../../Atoms/Input'
 
 // Templates
 import BasicTemplate from '../../Templates/BasicTemplate'
+import { Screen } from '../../../interfaces/interfaces'
 
 
 
-const RegisterScreen: React.FC<Page> = ({navigation}) => {
+const RegisterScreen: React.FC<Screen> = ({navigation}) => {
 	const auth = FbAuth,
 	[state, setState] = useState({
 		email: '',

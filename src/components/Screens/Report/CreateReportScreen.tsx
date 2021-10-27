@@ -6,7 +6,7 @@ import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
 
 // Redux
-import { getUserUid } from '../../../../redux/features/auth/authSlice'
+import { getUserId } from '../../../../redux/features/auth/authSlice'
 
 // Expo
 import * as ImageManipulator from 'expo-image-manipulator'
@@ -34,7 +34,7 @@ type CreateReportComponent = {
 }
 
 const CreateReport = ({route, navigation}: CreateReportComponent) => {
-	const userUid = useAppSelector(getUserUid)
+	const userId = useAppSelector(getUserId)
 	const db = FBDB
 	const [sendingReport, setSendingReport] = useState(false)
 	const [uploadProgress, setUploadProgress] = useState(0)
@@ -61,7 +61,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	const saveReport = async () => {
 		const tempUuid = uuid()
 		const uri = crunchedPhoto
-		const storageFileName = `reports/${userUid}/${tempUuid}`
+		const storageFileName = `reports/${userId}/${tempUuid}`
 		const res = await fetch(uri)
 		const blob = await res.blob()
 		const storage = firebaseStorage
@@ -123,12 +123,12 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		// TODO: Add report templates
 		try {
 			const docRef = await addDoc(collection(db, "reports"), {
-				uid: userUid,
+				uid: userId,
 				reportImage: downloadUrl,
 				location: richLocation?.location,
 				address: richLocation?.address,
 				rating: rating,
-				approved: false,
+				status: 'pending',
 				faces: route.params.faceDetected,
 				timestamp: serverTimestamp()
 			})

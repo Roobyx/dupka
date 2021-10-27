@@ -49,7 +49,7 @@ export const getUserEmail = createSelector(
 	(state: RootState) => state.auth.user.email
 )
 
-export const getUserUid = createSelector(
+export const getUserId = createSelector(
 	selectSelf,
 	(state: RootState) => state.auth.user.uid
 )
@@ -66,7 +66,10 @@ export const getLoadingState = createDraftSafeSelector(
 
 export const checkIsAdmin = createDraftSafeSelector(
 	selectSelf,
-	(state: RootState) => state.auth.user.uid === process.env.CFG_adminUID
+	(state: RootState) => {
+		console.log('admin uid env: ', process.env.CFG_adminUID)
+		return state.auth.user.uid === 'G9AyamPy6PPRJG3u13XvPLNkK2D3'
+	}
 
 )
 export default authSlice.reducer
