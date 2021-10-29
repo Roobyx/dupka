@@ -2,20 +2,36 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
 
-
-// Returns a LocationObject with the current device location
-export const getLocation = async (): Promise<LocationObject | null> => {
+export const checkLocationPermission = async () => {
 	let { status } = await Location.requestForegroundPermissionsAsync()
 
 	if (status !== 'granted') {
 		alert('No location access')
-		return null
+		return false
 	}
 
-	let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
+	return true
+}
 
-	// alert(location.coords.longitude + ' / ' + location.coords.latitude)
-	return location
+// Returns a LocationObject with the current device location
+export const getLocation = async (): Promise<LocationObject | null> => {
+	// let { status } = await Location.requestForegroundPermissionsAsync()
+
+	// if (status !== 'granted') {
+	// 	alert('No location access')
+	// 	return null
+	// }
+	let permission = await checkLocationPermission()
+
+	if (permission) {
+		let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
+		console.log('-----> Got NEW  loc: <------', location)
+
+		// alert(location.coords.longitude + ' / ' + location.coords.latitude)
+		return location
+	}
+
+	return null
 }
 
 // Returns an adress from given LocationObject
@@ -31,7 +47,7 @@ export const getAddressFromLocation = async (location: LocationObject): Promise<
 		})
 
 		for (let item of response) {
-			let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`
+			let address = `${item.street}, ${item.name}, ${item.city}, ${item.postalCode}`
 
 			currentAddress = address
 		}
@@ -68,12 +84,18 @@ export const getAddress = async (): Promise<string> => {
 
 export type RichLocationObject = {
 	location: Location.LocationObject | null,
-	address: string
+	address: string | undefined
 }
 
 export const getFullLocationInfo = async (): Promise<RichLocationObject> => {
 	let location = await getLocation()
-	let address = await getAddress()
+	// let address = await getAddress()
+	let address
+	let permission = await checkLocationPermission()
+
+	if (permission && location) {
+		address = await getAddressFromLocation(location)
+	}
 
 	return {
 		location,

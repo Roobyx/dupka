@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 // Expo
 import * as FaceDetector from 'expo-face-detector'
+import { textAlign } from 'styled-system'
 
 // {
 // 	"faceBox": Object {
@@ -166,7 +167,9 @@ const TakePhotoScreen = ({navigation}: any) => {
 							<>
 								<Text
 									style={{
-										position: 'absolute'
+										position: 'absolute',
+										color: '#fff',
+										textAlign: 'center'
 									}}
 								> 
 									Please avoid people in the photo

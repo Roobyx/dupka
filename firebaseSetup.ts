@@ -15,9 +15,6 @@ const firebaseConfig = {
 	measurementId: process.env.FBC_measurementId
 }
 
-console.log('ENV_Admin ---->: ', process.env.CFG_adminUID)
-console.log('ENV_DBURL ---->: ', process.env.FBC_dbUrl)
-
 // Initialize the firebase sdk
 export const firebaseApp = initializeApp(firebaseConfig)
 export const auth = getAuth()

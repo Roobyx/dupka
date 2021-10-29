@@ -21,7 +21,7 @@ import { useAppSelector } from '../../../../redux/features/hooks'
 
 // Custom
 //- Helpers
-import { getFullLocationInfo, RichLocationObject } from '../../../helpers/location'
+import { getFullLocationInfo, getLocation, RichLocationObject } from '../../../helpers/location'
 import LoadingIndicator from '../../Molecules/LoadingIndicator'
 import StarRating from 'react-native-star-rating-widget'
 
@@ -49,6 +49,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	useEffect(() => {
 		crunchPhoto()
 		updateLoc()
+		console.log('IN CREATE REPORT')
 	}, [])
 	
 
@@ -161,13 +162,30 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		// console.log('Compressed size: ', await FileSystem.getInfoAsync(manipResult.uri, {size: true}))
 	}
 
+	const testLocations = async () => {
+		setSendingReport(true)
+
+		let newLoc = await getLocation()
+
+		console.log('getLoc loc: ', newLoc)
+		console.log('Rich loc: ', richLocation?.address)
+
+		setSendingReport(false)
+
+		if (richLocation !== null && richLocation !== undefined) {
+			alert(richLocation.address)
+		} else {
+			alert('problem')
+		}
+	}
+
 	const setMaxDimention = () => {
 		let len = photoExif.PixelYDimension || photoExif.ImageLength
 		let width = photoExif.PixelXDimension || photoExif.ImageWidth
 		let newSize = 2048
 		let options: ActionResize = { resize: {}}
 		// console.log('exif: ', photoExif)
-		console.log(`----> len: ${len}, width ${width}`)
+		// console.log(`----> len: ${len}, width ${width}`)
 
 		// Check origin of photo
 		if(route.params.origin === 'camera') {
@@ -175,10 +193,10 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 			if(len > width) {
 				if(len > newSize) {
 					len = newSize
-					console.log(`Capped len = 2048 -> ${len}`)
+					// console.log(`Capped len = 2048 -> ${len}`)
 
 				} else {
-					console.log(`Capped newSize = ${len}`)
+					// console.log(`Capped newSize = ${len}`)
 					newSize = len
 
 				}
@@ -188,9 +206,9 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 			} else {
 				if(width > newSize) {
 					width = newSize
-					console.log(`Capped width = ${width}`)
+					// console.log(`Capped width = ${width}`)
 				} else {
-					console.log(`Capped newSize = ${width}`)
+					// console.log(`Capped newSize = ${width}`)
 					newSize = width
 				}
 				
@@ -220,7 +238,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 			options = { resize: {width: newSize} }
 		}
 
-		console.log('FinalValue: ', options)
+		// console.log('FinalValue: ', options)
 		return options
 	}
 
@@ -231,9 +249,11 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 					<LoadingIndicator action='Uploading' progress={uploadProgress} />
 				) : (
 					<>
-						<Heading>
-							Crete report:
-						</Heading>
+						<Center>
+							<Heading flex={1}>
+								Crete report:
+							</Heading>
+						</Center>
 						{/* TODO: Export to a comp and add to take and browse photos */}
 						<Center flex={2}>
 							<Image style={styles.photoPreview}
@@ -244,7 +264,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 						</Center>
 
-						<Box flex={1}>
+						<Center flex={1}>
 							<Text>
 								Rate the severity:
 							</Text>
@@ -254,11 +274,11 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 								rating={rating}
 								onChange={setRating}
 							/>
-						</Box>
+						</Center>
 
-						{/* <Button onPress={saveReport}> Save report </Button> */}
+						<Button onPress={saveReport}> Save report </Button>
 						{/* <Button onPress={() => uploadReport(crunchedPhoto)}> Fake report </Button> */}
-						<Button onPress={() => alert(richLocation?.location?.coords.latitude + ' ' + richLocation?.location?.coords.longitude)}> Fake report </Button>
+						{/* <Button onPress={() => testLocations()}> Fake report </Button> */}
 					</>
 				)
 			}

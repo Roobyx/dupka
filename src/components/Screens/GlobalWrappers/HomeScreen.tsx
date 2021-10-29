@@ -1,5 +1,5 @@
 // Vendor
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Ionicon from 'react-native-vector-icons/Ionicons'
@@ -19,11 +19,13 @@ import Map from '../../Organisms/Map'
 import { Screen } from '../../../interfaces/interfaces'
 import { TActionSheetItem } from '../../../interfaces/types'
 import FabMenu from '../../Molecules/FabMenu'
+import { getLocation } from '../../../helpers/location'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 
 
 const Tab = createNativeStackNavigator()
-// const Tab = createNativeBottom()
+const BTab = createBottomTabNavigator()
 
 const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
@@ -33,6 +35,10 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 		<Icon color="white" as={<Ionicon name="add" />} size="md" />
 	)
 	
+	useEffect(() => {
+		console.log('Home useEffect')
+	}, [])
+
 	const fab: IFabProps = {
 		position: 'absolute',
 		bg: 'tertiary.800',
@@ -54,10 +60,17 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 	return (
 		<Box flex={1}>
-			<Tab.Navigator>
-				<Tab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
-				<Tab.Screen name="Map" options={{ headerShown: false }} component={Map} />
-			</Tab.Navigator>
+			<BTab.Navigator>
+				<BTab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
+				<BTab.Screen name="Map" options={{ headerShown: false }} component={Map} />
+			</BTab.Navigator>
+
+				{/* <Tab.Navigator
+				>
+					<Tab.Screen name="Map" component={Map} />
+					<Tab.Screen name="Feed" component={Feed} />
+				</Tab.Navigator> */}
+
 
 			{
 				isFocused && (
@@ -70,12 +83,18 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				)
 			}
 
-			<Flex>
+			{/* <Flex>
+				<Row>
+					<Button w="50%" h='10' onPress={() => getLocation()}> Get current loc </Button>
+				</Row>
+			</Flex> */}
+
+			{/* <Flex>
 				<Row>
 					<Button w="50%" h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
 					<Button w="50%" h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
 				</Row>
-			</Flex>
+			</Flex> */}
 		</Box>
 	)
 }
@@ -85,4 +104,3 @@ const styles = StyleSheet.create({
 })
 
 export default HomeScreen
-

@@ -66,6 +66,9 @@ const Index = () => {
 			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
 			dispatch(setReports(parsedReports))
 		})()
+
+		console.log('APP.ts useEffect')
+
 	}, [])
 
 	
@@ -180,5 +183,4 @@ export default function App() {
 
 
 const styles = StyleSheet.create({
-
 })

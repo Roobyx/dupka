@@ -115,17 +115,6 @@ const Map = () => {
 								style={styles.map}
 								region={region}
 							> 
-								{/* {
-									(location && location.coords.latitude && location.coords.longitude) && (
-										<Marker
-											coordinate={{ latitude : location.coords.latitude , longitude : location.coords.longitude }}
-											title={'Test'}
-											description={'Test desc'}
-										/>
-									)
-								} */}
-		
-		
 								{
 									approvedReports && (
 										approvedReports.map((report, index) => {

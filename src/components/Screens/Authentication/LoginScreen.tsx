@@ -1,8 +1,8 @@
 // Vendor
 import React, { useState } from 'react'
-import { Button } from 'react-native'
+import { ImageBackground, StyleSheet, Image } from 'react-native'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { Center, Pressable, Text } from 'native-base'
+import { Button, Center, Pressable, Text, Box } from 'native-base'
 
 // Redux
 import { setActiveUser } from '../../../../redux/features/auth/authSlice'
@@ -16,6 +16,7 @@ import Error from '../../Atoms/Error'
 // Templates
 import BasicTemplate from '../../Templates/BasicTemplate'
 import { Screen } from '../../../interfaces/interfaces'
+import AuthWrapper from '../../Templates/AuthWrapper'
 
 const LoginScreen: React.FC<Screen> = ({navigation}) => {
 	const auth = getAuth()
@@ -30,7 +31,8 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 
 	const onLogin = async () => {
 		const { email, password } = loginState
-		
+
+
 		try {
 			const res = await signInWithEmailAndPassword(auth, email, password)
 			const user = JSON.parse(JSON.stringify(res.user))
@@ -47,10 +49,10 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 		}
 	}
 
+	const backgroundImage = { uri: 'splash.png' }
 
 	return (
-		<BasicTemplate isList={false} navigation={navigation}>
-
+		<AuthWrapper>
 			<Input
 				onChangeText={(email) => setLoginState( {...loginState, email})}
 				placeholder="Username"
@@ -61,23 +63,29 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 				onChangeText={(password) => setLoginState( {...loginState, password})}
 				placeholder="Password"
 				secure
-				keyboardType="visible-password"
+				keyboardType="default"
 			/>
 
-			<Button title="Log in" onPress={onLogin} />
+			<Button onPress={onLogin} > Log in </Button>
 
 			<Center width='100%'>
-				<Pressable onPress={() => navigation.navigate('Register') }> 
+				<Pressable pt='5' onPress={() => navigation.navigate('Register') }> 
 					<Text> Dont have an account yet? </Text> 
 				</Pressable>
 			</Center>
 		
 			<Error> {loginError} </Error>
-
-
-		</BasicTemplate>
+		</AuthWrapper>
 	)
 }
 
 
 export default LoginScreen
+
+
+const styles = StyleSheet.create({
+	image: {
+		flex: 1,
+		justifyContent: "center"
+	}
+})

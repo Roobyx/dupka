@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
-import { ScrollView, StatusBar, useColorScheme } from 'react-native'
-import { Box } from 'native-base'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, ScrollView, StatusBar, useColorScheme, SafeAreaView } from 'react-native'
+import { Box, Container } from 'native-base'
 
 type BasicTemplate = {
 	isList: boolean
@@ -15,23 +14,26 @@ const BasicTemplate: React.FC<BasicTemplate> = ({isList, children}) => {
 	}, [])
 
 	return (
-			<SafeAreaView>
+			<Box style={styles.container}>
 				<StatusBar translucent={true} />
-
 				{
 					isList ? (
-							<Box>
-								<ScrollView contentInsetAdjustmentBehavior="automatic">
-									<Box> { children } </Box>
-								</ScrollView>
-							</Box>
+						<ScrollView contentInsetAdjustmentBehavior="automatic">
+							<Box flex={1}> { children } </Box>
+						</ScrollView>
 						) : (
-							<Box> { children } </Box>
+						<Box flex={1}> { children } </Box>
 					)
 				}
-				
-			</SafeAreaView>
+			</Box>
 		)
 }
 
 export default BasicTemplate
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		// justifyContent: "center"
+	}
+})
