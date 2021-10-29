@@ -4,6 +4,7 @@ import { Center, ScrollView, Image, Heading } from 'native-base'
 import { getAllReports } from '../../../redux/features/reports/reportsSlice'
 import { useAppSelector } from '../../../redux/features/hooks'
 import { Report } from '../../interfaces/interfaces'
+import FeedItem from '../Molecules/FeedItem'
 
 const Feed = () => {
 	const allReports: Report[] = useAppSelector(getAllReports)
@@ -16,13 +17,7 @@ const Feed = () => {
 						return (
 							report.status === 'approved' && (
 								<Center key={report.reportId} p='30'>
-									<Heading> {report.address} </Heading>
-									
-									<Image source={{
-										uri: report.reportImage
-									}} alt={report.address} size='2xl' resizeMode='contain' />
-	
-									{/* <Text> {()=> {new Date(report.timestamp).toLocaleString()}} </Text> */}
+									<FeedItem address={report.address} timestamp={report.timestamp} imageUri={report.reportImage} rating={report.rating} />
 								</Center>
 							)
 						)
