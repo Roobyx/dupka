@@ -21,6 +21,9 @@ import { TActionSheetItem } from '../../../interfaces/types'
 import FabMenu from '../../Molecules/FabMenu'
 import { getLocation } from '../../../helpers/location'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { setReports } from '../../../../redux/features/reports/reportsSlice'
+import { fetchAllReports } from '../../../../redux/features/reports/reportOperations'
+import { useAppDispatch } from '../../../../redux/features/hooks'
 
 
 
@@ -30,6 +33,7 @@ const BTab = createBottomTabNavigator()
 const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
 	const isFocused = useIsFocused()
+	const dispatch = useAppDispatch()
 
 	const fabIcon = (
 		<Icon color="white" as={<Ionicon name="add" />} size="md" />
@@ -37,6 +41,18 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	
 	useEffect(() => {
 		console.log('Home useEffect')
+	}, [])
+
+	// Get All reports on start
+	useEffect(() => {
+		(async () => {
+			const fetchedReports = await fetchAllReports()
+			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+			dispatch(setReports(parsedReports))
+		})()
+
+		console.log('home.ts useEffect')
+
 	}, [])
 
 	const fab: IFabProps = {

@@ -22,18 +22,19 @@ import Error
 // Molecules
 import LoadingIndicator from '../Molecules/LoadingIndicator'
 import { getLocation } from '../../helpers/location'
-import { getAllReports } from '../../../redux/features/reports/reportsSlice'
+import { getAllReports, setReports } from '../../../redux/features/reports/reportsSlice'
 
 // Types & Interfaces
 import { Region, MapMode } from '../../interfaces/types'
 import { Report } from '../../interfaces/interfaces'
 import FabMenu from '../Molecules/FabMenu'
 import { useIsFocused } from '@react-navigation/native'
+import { fetchAllReports } from '../../../redux/features/reports/reportOperations'
 
 
 
 const Map = () => {
-	// const dispatch = useAppDispatch()
+	const dispatch = useAppDispatch()
 	const [loading, setLoading] = useState(false)
 	const [location, setLocation] = useState<LocationObject>()
 	const [region, setRegion] = useState<Region>()
@@ -69,6 +70,18 @@ const Map = () => {
 
 		// TODO: Check for potential mem leack (unsubscribe) - Check all other useEffect hooks (2)
 		return () => {}
+	}, [])
+
+	// Get All reports on start
+	useEffect(() => {
+		(async () => {
+			const fetchedReports = await fetchAllReports()
+			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+			dispatch(setReports(parsedReports))
+		})()
+
+		console.log('Map.ts useEffect')
+
 	}, [])
 
 	let allReports: Report[] = useAppSelector(getAllReports)
@@ -118,10 +131,10 @@ const Map = () => {
 								{
 									approvedReports && (
 										approvedReports.map((report, index) => {
-											// console.log('report: ', { 
-											// 	latitude: report.location.coords.latitude, 
-											// 	longitude: report.location.coords.longitude 
-											// })
+											console.log('report: ', { 
+												latitude: report.location.coords.latitude, 
+												longitude: report.location.coords.longitude 
+											})
 
 											{/* TODO: Custom tooltip */}
 												{/* <Marker
@@ -143,7 +156,7 @@ const Map = () => {
 														<Text> {report.address} </Text>
 													</Callout> 
 												</Marker> */}
-
+											console.log('index: ', index)
 											return (
 												<Marker
 													key={index}
