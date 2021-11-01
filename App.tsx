@@ -26,7 +26,7 @@ import { auth } from './firebaseSetup'
 //- Screens
 import LandingScreen from './src/components/Screens/GlobalWrappers/LandingScreen'
 import RegisterScreen from './src/components/Screens/Authentication/RegisterScreen'
-import LoginScreen from './src/components/Screens/Authentication/EmailLoginScreen'
+import LoginScreen from './src/components/Screens/Authentication/LoginScreen'
 import HomeScreen from './src/components/Screens/GlobalWrappers/HomeScreen'
 import AddPhotoScreen from './src/components/Screens/Report/TakePhotoScreen'
 import BrowsePhotoScreen from './src/components/Screens/Report/BrowsePhotoScreen'
@@ -172,7 +172,7 @@ export default function App() {
 		<Provider store={store}>
 			 <PersistGate loading={null} persistor={persistor}>
 				<SafeAreaProvider>
-					<NativeBaseProvider>
+					<NativeBaseProvider config={config}>
 						<Index />
 					</NativeBaseProvider>
 				</SafeAreaProvider>
@@ -184,3 +184,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
 })
+
+const config = {
+	dependencies: {
+		'linear-gradient': require('expo-linear-gradient').LinearGradient
+	}
+}

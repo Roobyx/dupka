@@ -76,9 +76,6 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		const uploadTask = uploadBytesResumable(storageRef, blob)
 
 		if(rating === 0) {
-			// TODO: switch with RN Alert
-			// alert('Rating is required')
-
 			Alert.alert(
 				"Rating is required",
 				"Please rate the report, before submiting",

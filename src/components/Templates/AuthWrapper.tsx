@@ -27,7 +27,7 @@ const AuthWrapper: React.FC<AuthWrapperInterface> = ({navigation, children}) => 
 					</Heading>
 				</Center>
 				
-				<Box flex={1}>
+				<Box flex={2}>
 					{ children }
 				</Box>
 			</Box>

@@ -81,11 +81,11 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				<BTab.Screen name="Map" options={{ headerShown: false }} component={Map} />
 			</BTab.Navigator>
 
-				{/* <Tab.Navigator
-				>
-					<Tab.Screen name="Map" component={Map} />
-					<Tab.Screen name="Feed" component={Feed} />
-				</Tab.Navigator> */}
+			<Tab.Navigator
+			>
+				<Tab.Screen name="Map" component={Map} />
+				<Tab.Screen name="Feed" component={Feed} />
+			</Tab.Navigator>
 
 
 			{
@@ -101,14 +101,8 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 			{/* <Flex>
 				<Row>
-					<Button w="50%" h='10' onPress={() => getLocation()}> Get current loc </Button>
-				</Row>
-			</Flex> */}
-
-			{/* <Flex>
-				<Row>
-					<Button w="50%" h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
-					<Button w="50%" h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
+					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
+					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
 				</Row>
 			</Flex> */}
 		</Box>
