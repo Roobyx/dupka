@@ -48,8 +48,8 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// Crunch the photo upon landing on the screen
 	useEffect(() => {
 		crunchPhoto()
-		updateLoc()
-		console.log('IN CREATE REPORT')
+		// updateLoc()
+		console.log('IN CREATE REPORT (useEffect)')
 	}, [])
 	
 
@@ -120,7 +120,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	// Utility to build up and upload the report
 	const uploadReport = async (downloadUrl: string) => {
 		console.log('Running uploadReport')
-		updateLoc()
+		await updateLoc()
 		// TODO: Add report templates
 		try {
 			const docRef = await addDoc(collection(db, "reports"), {
@@ -129,7 +129,9 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				location: richLocation?.location,
 				address: richLocation?.address,
 				rating: rating,
+				numberOfRatings: [userId],
 				status: 'pending',
+				likes: [],
 				faces: route.params.faceDetected,
 				timestamp: serverTimestamp()
 			})

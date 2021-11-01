@@ -13,7 +13,9 @@ export interface Report {
 	address: string,
 	location: LocationObject,
 	rating: number,
+	rates: string[],
 	reportImage: string,
+	likes: string[],
 	status: 'approved' | 'pending' | 'rejected',
 	timestamp: Timestamp
 }

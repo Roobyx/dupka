@@ -5,34 +5,37 @@ import { Box, Text, Center, Spinner, Heading } from "native-base"
 type LoadingIndicator = {
 	action?: string,
 	progress?: number
+	spinnerOnly?: boolean
+	style?: any
 }
 
-const LoadingIndicator: React.FC<LoadingIndicator> = ({action, progress}) => {
+const LoadingIndicator: React.FC<LoadingIndicator> = ({action, progress, spinnerOnly, style}) => {
+	const componentHeight = spinnerOnly ? 'auto' : '100%'
+
 	return (
-		<Center height={'100%'} width={{base: '100%'}}>
+		<Center style={style || styles} height={componentHeight} width={{base: '100%'}}>
 			<Box>
 				<Spinner accessibilityLabel="Loading posts" />
-				<Heading color="primary.500" fontSize="md">
-					{
-						action ? `${action} ` : 'Loading'
-					}
+				{
+					!spinnerOnly && (
+						<Heading color="primary.500" fontSize="md">
+							{
+								action ? `${action} ` : 'Loading'
+							}
 
-					{
-						progress && ` ${Math.floor(progress)}%` 
-					}
-				</Heading>
+							{
+								progress && ` ${Math.floor(progress)}%` 
+							}
+						</Heading>
+					)
+				}
 			</Box>
 		</Center>
 	)
 }
 
-// const styles = StyleSheet.create({
-// 	absolute: {
-// 		position: 'absolute',
-// 		top: '40pt',
-// 		left: '40pt'
-// 	}
-// })
+const styles = StyleSheet.create({
+})
 
 export default LoadingIndicator
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { RefreshControl, StyleSheet } from 'react-native'
 import { Box, Center, ScrollView, Image, Heading, Button, HStack } from 'native-base'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../../../firebaseSetup'
@@ -16,6 +16,12 @@ const AdminFeed = () => {
 		const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
 		dispatch(setReports(parsedReports))
 	}
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true)
+		updateReports().then(() => setRefreshing(false))
+	}, [])
 
 	const allReports: Report[] = useAppSelector(getAllReports)
 
@@ -39,7 +45,15 @@ const AdminFeed = () => {
 	}
 	
 	return (
-		<ScrollView flex={1}>
+		<ScrollView 
+			flex={1} 
+			refreshControl={
+				<RefreshControl
+					refreshing={refreshing}
+					onRefresh={onRefresh}
+				/>
+			}
+		>
 			{
 				allReports.map(
 					(report, index) => {

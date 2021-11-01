@@ -38,6 +38,7 @@ The app's main idea is to have users create reports with photos and share them o
 Each of the features is developped and working for both iOS and Android
 
 ## Feature Roadmap:
+- Properly refactor the atomic design structure
 - Annonymus firebase login
 - Provider logins (Fb/google)
 - Face detection on storage photos
