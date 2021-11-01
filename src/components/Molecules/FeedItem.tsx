@@ -176,7 +176,9 @@ const FeedItem = ({report}: TFeedItem) => {
 					px="5"
 					py="2.5"
 				>
-					Rating: { report.rating } / 5
+					<Text color={'white'}>
+						Rating: { report.rating } / 5
+					</Text>
 				</Center>
 
 				{
@@ -191,7 +193,9 @@ const FeedItem = ({report}: TFeedItem) => {
 							px="5"
 							py="2.5"
 						>
-							Likes: { report.likes.length }
+							<Text color={'white'}>
+								Likes: { report.likes.length }
+							</Text>
 						</Center>
 					)
 				}

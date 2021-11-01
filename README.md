@@ -34,6 +34,9 @@ The app's main idea is to have users create reports with photos and share them o
 - Scrollable reports feed (after admin aproval)
 - General map view of the reports
 - Heatmap view of the reports
+- Report like system
+- Report rating system by all users
+- Report share (currently only image)
 
 Each of the features is developped and working for both iOS and Android
 
@@ -52,4 +55,4 @@ Each of the features is developped and working for both iOS and Android
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch
-- Location is not always renewed and some reports end up on older locations
+- Location is not always renewed and some reports end up on older locations (testing)
