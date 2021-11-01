@@ -24,7 +24,7 @@ export const getLocation = async (): Promise<LocationObject | null> => {
 	let permission = await checkLocationPermission()
 
 	if (permission) {
-		let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High })
+		let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
 		console.log('-----> Got NEW  loc: <------', location)
 
 		// alert(location.coords.longitude + ' / ' + location.coords.latitude)

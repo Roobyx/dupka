@@ -17,11 +17,17 @@ const Landing: React.FC<Screen> = ({navigation}) => {
 	
 	return (
 		<AuthWrapper>
-			<Button onPress={() => navigation.navigate('Login') }> Log in  </Button>
+			<Button onPress={() => navigation.navigate('Login') }> Log in with email  </Button>
 			
+
+
 			<Center>
+				<Heading>
+					Dont have an account yet?
+				</Heading>
+
 				<Pressable pt='2' onPress={() => navigation.navigate('Register') }> 
-					<Text> Dont have an account yet? </Text> 
+					<Text> Register with email </Text> 
 				</Pressable>
 			</Center>
 		</AuthWrapper>

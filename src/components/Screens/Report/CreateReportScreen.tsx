@@ -1,6 +1,6 @@
 // Vendor
 import React, { useEffect, useState } from 'react'
-import { Platform, StyleSheet } from 'react-native'
+import { Platform, StyleSheet, Alert } from 'react-native'
 import { Box, Image, Button, Center, Text, Heading} from 'native-base'
 import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
@@ -47,15 +47,20 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 
 	// Crunch the photo upon landing on the screen
 	useEffect(() => {
+		// (async ()=>{
+		// 	await updateLoc()
+		// })()
+		
 		crunchPhoto()
-		// updateLoc()
 		console.log('IN CREATE REPORT (useEffect)')
 	}, [])
 	
 
 	const updateLoc = async () => {
 		let loc = await getFullLocationInfo()
-		setRichLocation(loc)
+		// setRichLocation(loc)
+
+		return loc
 	}
 
 	// Bundle the report upload
@@ -70,66 +75,89 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		
 		const uploadTask = uploadBytesResumable(storageRef, blob)
 
-		uploadTask.on('state_changed', (snapshot: any) => {
-			// Set the loading logic to true
-			setSendingReport(true)
-		
-			// Listen for state changes, errors, and completion of the upload.
-	
-			// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-			const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-				console.log('Upload is ' + progress + '% done')
-				setUploadProgress(progress)
+		if(rating === 0) {
+			// TODO: switch with RN Alert
+			// alert('Rating is required')
 
-				switch (snapshot.state) {
-					case 'paused':
-					console.log('Upload is paused')
-					break
-					case 'running':
-					console.log('Upload is running')
-					break
-				}
-			},  (e: any) => {
-				switch (e.code) {
-					case 'storage/unauthorized':
-					// User doesn't have permission to access the object
-					break
-					case 'storage/canceled':
-					// User canceled the upload
-					break
-					case 'storage/unknown':
-					// Unknown error occurred, inspect error.serverResponse
-					break
-				}
-			}, () => {
-				// Upload completed successfully, now we can get the download URL
-				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					console.log('File available at', downloadURL)
-					uploadReport(downloadURL)
-				}).then(
-					() => {
-						// Set the loading back to false
-						setSendingReport(false)
-						navigation.popToTop({reportStatus: 'success'})
+			Alert.alert(
+				"Rating is required",
+				"Please rate the report, before submiting",
+				[
+					{ text: "OK", onPress: () => console.log("OK Pressed") }
+				]
+			)
+
+		} else {
+			uploadTask.on('state_changed', (snapshot: any) => {
+				// Set the loading logic to true
+				setSendingReport(true)
+			
+				// Listen for state changes, errors, and completion of the upload.
+		
+				// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+					console.log('Upload is ' + progress + '% done')
+					setUploadProgress(progress)
+	
+					switch (snapshot.state) {
+						case 'paused':
+						console.log('Upload is paused')
+						break
+						case 'running':
+						console.log('Upload is running')
+						break
 					}
-				)
-			}
-		)
+				},  (e: any) => {
+					switch (e.code) {
+						case 'storage/unauthorized':
+						// User doesn't have permission to access the object
+						break
+						case 'storage/canceled':
+						// User canceled the upload
+						break
+						case 'storage/unknown':
+						// Unknown error occurred, inspect error.serverResponse
+						break
+					}
+				}, () => {
+					// Upload completed successfully, now we can get the download URL
+					getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+						console.log('File available at', downloadURL)
+						uploadReport(downloadURL)
+					}).then(
+						() => {
+							// Set the loading back to false
+							setSendingReport(false)
+							// alert('Report sent. Waiting for approval.')
+							Alert.alert(
+								"Report submited",
+								"Your report is being proccesed and will be available when ready.",
+								[
+									{ text: "OK", onPress: () => console.log("OK Pressed") }
+								]
+							)
+							navigation.popToTop({reportStatus: 'success'})
+						}
+					)
+				}
+			)
+		}
 	}
 
 	// Utility to build up and upload the report
 	const uploadReport = async (downloadUrl: string) => {
 		console.log('Running uploadReport')
-		await updateLoc()
+		const newRichLoc = await updateLoc()
+
 		// TODO: Add report templates
 		try {
 			const docRef = await addDoc(collection(db, "reports"), {
 				uid: userId,
 				reportImage: downloadUrl,
-				location: richLocation?.location,
-				address: richLocation?.address,
+				location: newRichLoc.location,
+				address: newRichLoc.address,
 				rating: rating,
-				numberOfRatings: [userId],
+				rates: [userId],
 				status: 'pending',
 				likes: [],
 				faces: route.params.faceDetected,
@@ -140,6 +168,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		} catch(e) {
 			console.log('Error in db write: ', e)
 		}
+		
 	}
 	
 	// Compress the photo to save bandwith on the server
@@ -164,22 +193,22 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		// console.log('Compressed size: ', await FileSystem.getInfoAsync(manipResult.uri, {size: true}))
 	}
 
-	const testLocations = async () => {
-		setSendingReport(true)
+	// const testLocations = async () => {
+	// 	setSendingReport(true)
 
-		let newLoc = await getLocation()
+	// 	let newLoc = await getLocation()
 
-		console.log('getLoc loc: ', newLoc)
-		console.log('Rich loc: ', richLocation?.address)
+	// 	console.log('getLoc loc: ', newLoc)
+	// 	// console.log('Rich loc: ', richLocation?.address)
 
-		setSendingReport(false)
+	// 	setSendingReport(false)
 
-		if (richLocation !== null && richLocation !== undefined) {
-			alert(richLocation.address)
-		} else {
-			alert('problem')
-		}
-	}
+	// 	if (richLocation !== null && richLocation !== undefined) {
+	// 		alert(richLocation.address)
+	// 	} else {
+	// 		alert('problem')
+	// 	}
+	// }
 
 	const setMaxDimention = () => {
 		let len = photoExif.PixelYDimension || photoExif.ImageLength
@@ -200,7 +229,6 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 				} else {
 					// console.log(`Capped newSize = ${len}`)
 					newSize = len
-
 				}
 
 				options = { resize: {height: newSize} }
@@ -278,7 +306,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 						</Center>
 
-						<Button onPress={saveReport}> Save report </Button>
+						<Button onPress={saveReport}> Submit report </Button>
 						{/* <Button onPress={() => uploadReport(crunchedPhoto)}> Fake report </Button> */}
 						{/* <Button onPress={() => testLocations()}> Fake report </Button> */}
 					</>
