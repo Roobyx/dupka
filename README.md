@@ -42,8 +42,7 @@ Each of the features is developped and working for both iOS and Android
 
 ## Feature Roadmap:
 - Properly refactor the atomic design structure
-- Annonymus firebase login
-- Provider logins (Fb/google)
+- ~~Annonymus firebase login~~
 - Face detection on storage photos
 - Face blurring before upload
 - Feed filters
@@ -55,4 +54,4 @@ Each of the features is developped and working for both iOS and Android
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch
-- Location is not always renewed and some reports end up on older locations (testing)
+- Location is not always renewed and some reports end up on older locations (potentially fiex, but needs testing)
