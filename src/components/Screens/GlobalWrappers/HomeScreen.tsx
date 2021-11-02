@@ -9,7 +9,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 
 // UI
-import { Box } from 'native-base'
+import { Box, Button, Flex, Row } from 'native-base'
 
 //- Organisms
 import Feed from '../../Organisms/Feed'
@@ -76,15 +76,15 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 	return (
 		<Box flex={1}>
-			<BTab.Navigator>
+			{/* <BTab.Navigator>
 				<BTab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
 				<BTab.Screen name="Map" options={{ headerShown: false }} component={Map} />
-			</BTab.Navigator>
+			</BTab.Navigator> */}
 
-			{/* <Tab.Navigator>
-				<Tab.Screen name="Map" component={Map} />
-				<Tab.Screen name="Feed" component={Feed} />
-			</Tab.Navigator> */}
+			<Tab.Navigator>
+				<Tab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
+				<Tab.Screen name="Map" options={{ headerShown: false }} component={Map} />
+			</Tab.Navigator>
 
 
 			{
@@ -98,12 +98,12 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				)
 			}
 
-			{/* <Flex>
+			<Flex>
 				<Row>
 					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
 					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
 				</Row>
-			</Flex> */}
+			</Flex>
 		</Box>
 	)
 }
