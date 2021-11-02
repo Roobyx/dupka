@@ -9,7 +9,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 
 // UI
-import { Box, Button, Flex, Row } from 'native-base'
+import { Box } from 'native-base'
 
 //- Organisms
 import Feed from '../../Organisms/Feed'
@@ -81,11 +81,10 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				<BTab.Screen name="Map" options={{ headerShown: false }} component={Map} />
 			</BTab.Navigator>
 
-			<Tab.Navigator
-			>
+			{/* <Tab.Navigator>
 				<Tab.Screen name="Map" component={Map} />
 				<Tab.Screen name="Feed" component={Feed} />
-			</Tab.Navigator>
+			</Tab.Navigator> */}
 
 
 			{
