@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { Fab, Actionsheet, Box, Text, useDisclose} from 'native-base'
 // Types & Interfaces
 import { IFabMenu } from '../../interfaces/interfaces'
+import { boxShadow } from 'styled-system'
 
 
 const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
@@ -12,9 +13,11 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 	return (
 		<>
 			<Fab
+				// style={styles.fabExtra}
 				position={fab.position}
 				bg={fab.bg}
 				size={fab.size}
+				// shadow={'none'}
 				// Fab icon example: <Icon color="white" as={<Ionicon name="add" />} size="md" />
 				icon={fab.icon}
 				onPress={onOpen}
@@ -50,4 +53,9 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 
 export default FabMenu
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+	// fabExtra: {
+	// 	borderWidth: 10,
+	// 	borderColor: '#fff'
+	// }
+})
