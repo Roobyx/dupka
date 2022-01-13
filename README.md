@@ -54,4 +54,4 @@ Each of the features is developped and working for both iOS and Android
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch
-- Location is not always renewed and some reports end up on older locations (potentially fiex, but needs testing)
+- Location is not always renewed and some reports end up on older locations (potentially fixed, but needs testing)
