@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Share } from 'react-native'
 import { Box, Heading, Text, Image, AspectRatio, Center, Stack, HStack, Button, Modal } from 'native-base'
+import 'intl';
+import 'intl/locale-data/jsonp/en';
 
 // Firebase
 import { doc, setDoc, Timestamp } from 'firebase/firestore'
@@ -30,7 +32,6 @@ const FeedItem = ({report}: TFeedItem) => {
 	const [refreshing, setRefreshing] = useState(false)
 	const [rating, setRating] = useState(0)
 
-
 	const updateReports = async () => {
 		const fetchedReports = await fetchAllReports()
 		const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
@@ -40,11 +41,9 @@ const FeedItem = ({report}: TFeedItem) => {
 	let reportLiked = useRef(false)
 	let reportRated = useRef(false)
 
-
 	useEffect(() => {
 		if(report.likes) {
 			reportLiked.current = report.likes.includes(userId)
-			// console.log('Liked in UE?', reportLiked)
 		}
 
 		if(report.rates) {
@@ -71,29 +70,23 @@ const FeedItem = ({report}: TFeedItem) => {
 		}
 	};
 
-	// console.log('Liked?', reportLiked.current)
-
-
 	const getTime = (seconds: number) => {
 		const time = new Date(Date.UTC(1970, 0, 1))
 		time.setSeconds(seconds)
-		return time.toLocaleString()
+		const monthString = new Intl.DateTimeFormat('bg-BG', {month: 'long'}).format(time)
+		const timeString = time.getDate() + ' ' + monthString  + ' ' + time.getHours() + ':' + time.getMinutes()
+		return timeString
 	}
 
-	// console.log('Time: ', getTime(report.timestamp.seconds))
 	const reportTime = getTime(report.timestamp.seconds)
-
-
 
 	const likeAction = async (doLike: boolean) => {
 		let newLikes = [userId]
 		setRefreshing(true)
 
-
 		if(doLike) {
-			if (report.likes) {
-				console.log('Report already has likes')
-				newLikes.push(report.likes)
+			if (report.likes.length) {
+				newLikes = newLikes.concat(report.likes)
 			}
 		} else {
 			newLikes = newLikes.filter( id => {
@@ -103,8 +96,7 @@ const FeedItem = ({report}: TFeedItem) => {
 
 		try {
 			console.log('Trying to amend  data')
-
-			const docRef = await setDoc(doc(db, "reports", report.reportId), {
+			await setDoc(doc(db, "reports", report.reportId), {
 				...report,
 				likes: newLikes
 			})
@@ -119,31 +111,32 @@ const FeedItem = ({report}: TFeedItem) => {
 	}
 
 	const rateAction = async () => {
-		let ratingsCount = [userId]
-		let newRating = rating
+		let currentRates = [userId]
+		let newRating = 0
 		setRefreshing(true)
 
-	
-		if (report.rates) {
-			console.log('Report already rated')
-			ratingsCount.push(report.rates)
-			newRating = (report.rating + rating) / ratingsCount.length
-		}
+		if(!reportRated.current) {
+			if (report.rates.length) {
+				console.log('Report already rated')
+				currentRates = currentRates.concat(report.rates)
+				newRating = ((report.rating * report.rates.length) + rating) / (report.rates.length + 1)
+			}
 
-		try {
-			console.log('Trying to amend  data')
-			const docRef = await setDoc(doc(db, "reports", report.reportId), {
-				...report,
-				rates: ratingsCount,
-				rating: newRating
-			})
-			
-			console.log("Report amended")
-			updateReports().then(() => setRefreshing(false))
+			try {
+				console.log('Trying to amend  data')
+				await setDoc(doc(db, "reports", report.reportId), {
+					...report,
+					rates: currentRates,
+					rating: newRating
+				})
+				
+				console.log("Report amended")
+				updateReports().then(() => setRefreshing(false))
 
-		} catch(e) {
-			console.log('Error in db write: ', e)
-			setRefreshing(false)
+			} catch(e) {
+				console.log('Error in db write: ', e)
+				setRefreshing(false)
+			}
 		}
 	}
 
@@ -157,9 +150,10 @@ const FeedItem = ({report}: TFeedItem) => {
 			_dark={{ backgroundColor: 'gray.700' }}
 			style={{position: 'relative'}}
 		>
+			{/* zIndex: '100' -> cannot be parsed */}
 			{
 				refreshing && (
-					<LoadingIndicator spinnerOnly={true} style={{position: 'absolute', zIndex: '100'}}/>
+					<LoadingIndicator spinnerOnly={true} style={{position: 'absolute'}}/>
 				)
 			}
 			<Box p='0'>
@@ -177,7 +171,7 @@ const FeedItem = ({report}: TFeedItem) => {
 					py="2.5"
 				>
 					<Text color={'white'}>
-						Rating: { report.rating } / 5
+						Rating: { Math.round(report.rating * 100) / 100 } / 5
 					</Text>
 				</Center>
 
@@ -223,7 +217,9 @@ const FeedItem = ({report}: TFeedItem) => {
 				<Button rounded='none' w='33.33%' onPress={ () => { reportLiked.current ? likeAction(false) : likeAction(true)}}> 
 					{ reportLiked.current ? 'Dislike' : 'Like' }
 				</Button>
-				<Button rounded='none' w='33.33%' onPress={ () => setShowModal(true) }> Rate </Button>
+				<Button rounded='none' w='33.33%' onPress={ () => setShowModal(true) }> 
+					{ reportRated.current ? 'Rated' : 'Rate'}
+				</Button>
 				<Button rounded='none' w='33.33%' onPress={ onShare }> Share </Button>
 			</HStack>
 

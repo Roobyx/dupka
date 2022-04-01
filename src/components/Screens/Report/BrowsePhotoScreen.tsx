@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import { Box, Center, HStack, Image, Pressable, Text } from 'native-base'
 import { Platform } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
+import { NavElement } from '../../../interfaces/types'
 
 const BrowsePhotoScreen = ({navigation}: NavElement) => {
 	const [photoPath, setPhotoPath] = useState<string | null>(null)

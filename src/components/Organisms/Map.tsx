@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet } from 'react-native'
-import { Box, Text, Image } from 'native-base'
+import { Box } from 'native-base'
 import { Icon, IFabProps } from 'native-base'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 
@@ -156,7 +156,6 @@ const Map = () => {
 														<Text> {report.address} </Text>
 													</Callout> 
 												</Marker> */}
-											console.log('index: ', index)
 											return (
 												<Marker
 													key={index}

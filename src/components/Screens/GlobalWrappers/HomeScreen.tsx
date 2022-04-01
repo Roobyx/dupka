@@ -25,8 +25,6 @@ import { setReports } from '../../../../redux/features/reports/reportsSlice'
 import { fetchAllReports } from '../../../../redux/features/reports/reportOperations'
 import { useAppDispatch } from '../../../../redux/features/hooks'
 
-
-
 const Tab = createNativeStackNavigator()
 const BTab = createBottomTabNavigator()
 
@@ -34,14 +32,13 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
 	const isFocused = useIsFocused()
 	const dispatch = useAppDispatch()
-
+	
 	const fabIcon = (
 		<Icon color="white" as={<Ionicon name="add" />} size="md" />
 	)
-	
-	useEffect(() => {
-		console.log('Home useEffect')
-	}, [])
+
+	// console.log('Nav: ', navigation.getState().index === 0)
+	// console.log('isFocused: ', isFocused)
 
 	// Get All reports on start
 	useEffect(() => {
@@ -50,9 +47,6 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
 			dispatch(setReports(parsedReports))
 		})()
-
-		console.log('home.ts useEffect')
-
 	}, [])
 
 	const fab: IFabProps = {
@@ -61,6 +55,7 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 		size: "md",
 		icon: fabIcon
 	}
+	
 	const openPhotoScreen = (screen: string) => {
 		screen === 'takePhoto' ? (
 			navigation.navigate('AddPhoto')
@@ -76,16 +71,10 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 	return (
 		<Box flex={1}>
-			{/* <BTab.Navigator>
-				<BTab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
-				<BTab.Screen name="Map" options={{ headerShown: false }} component={Map} />
-			</BTab.Navigator> */}
-
-			<Tab.Navigator>
+			{/* <Tab.Navigator>
 				<Tab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
 				<Tab.Screen name="Map" options={{ headerShown: false }} component={Map} />
-			</Tab.Navigator>
-
+			</Tab.Navigator> */}
 
 			{
 				isFocused && (
@@ -98,12 +87,28 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				)
 			}
 
-			<Flex>
+			<BTab.Navigator>
+				<BTab.Screen 
+					name="Feed" options={{ 
+						headerShown: false,
+						tabBarIcon: () => (
+							<Icon color={isFocused ? "#20d3ee" : "amber.400"} as={<Ionicon name="images-outline" />} size="sm" />
+						),
+					}} component={Feed} />
+				<BTab.Screen name="Map" options={{
+					headerShown: false,
+					tabBarIcon: () => (
+						<Icon color={isFocused ? "#20d3ee" : "amber.400"} as={<Ionicon name="map-outline" />} size="sm" />
+					),
+				}} component={Map} />
+			</BTab.Navigator>
+
+			{/* <Flex>
 				<Row>
 					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
 					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
 				</Row>
-			</Flex>
+			</Flex> */}
 		</Box>
 	)
 }

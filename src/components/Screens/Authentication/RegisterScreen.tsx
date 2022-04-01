@@ -1,6 +1,6 @@
 // Vendor
 import React, { useState } from 'react'
-// import { Button } from 'react-native'
+import { StyleSheet} from 'react-native'
 import { Center, Pressable, Text, Button } from 'native-base'
 
 // Firebase
@@ -127,7 +127,7 @@ const RegisterScreen: React.FC<Screen> = ({navigation}) => {
 							</Center>
 						) }
 
-						<Button onPress={onSignup}> Complete account </Button>
+						<Button style={styles.button} onPress={onSignup}> Complete account </Button>
 						
 						<Center width='100%'>
 							<Pressable pt='5' onPress={() => navigation.navigate('Login') }> 
@@ -143,5 +143,19 @@ const RegisterScreen: React.FC<Screen> = ({navigation}) => {
 	)
 }
 
+
+const styles = StyleSheet.create({
+	image: {
+		flex: 1,
+		justifyContent: "center"
+	},
+	button: {
+		height: 40,
+		margin: 12,
+		borderWidth: 1,
+		padding: 10,
+		borderRadius: 50,
+	}
+})
 
 export default RegisterScreen

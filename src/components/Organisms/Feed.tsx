@@ -25,8 +25,8 @@ const Feed = () => {
 	}, [])
 
 	return (
-		<ScrollView 
-			flex={1} 
+		<ScrollView
+			flex={1}
 			refreshControl={
 				<RefreshControl
 					refreshing={refreshing}
@@ -34,7 +34,6 @@ const Feed = () => {
 				/>
 			}
 		>
-			
 			{ 
 				allReports.map(
 					(report) => {

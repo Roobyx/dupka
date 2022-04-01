@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { ImageBackground, StyleSheet, Image } from 'react-native'
 import { getAuth, linkWithPopup, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { Button, Center, Pressable, Text, Box, Divider, Heading, HStack } from 'native-base'
-import Icon from 'react-native-vector-icons/AntDesign'
+
 
 // Firebase
 import { GoogleAuthProvider, FacebookAuthProvider, TwitterAuthProvider, GithubAuthProvider } from "firebase/auth"
@@ -30,9 +30,7 @@ const facebookProvider = new FacebookAuthProvider()
 const LoginScreen: React.FC<Screen> = ({navigation}) => {
 	// const auth = getAuth()
 	const dispatch = useAppDispatch()
-
 	const [ loginType, setLoginType ] = useState('default')
-
 	const [ loginState, setLoginState ] = useState({
 		email: '',
 		password: ''
@@ -61,7 +59,6 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 	}
 
 	const onLoginGoogle = async () => {
-
 		try {
 			const res = await signInWithPopup(auth, googleProvider)
 			const credential = GoogleAuthProvider.credentialFromResult(res)
@@ -96,11 +93,9 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 
 	}
 
-	const backgroundImage = { uri: 'splash.png' }
-
 	return (
 		<AuthWrapper>
-			<Center> <Heading> Login with email </Heading> </Center>
+			<Center> <Heading color={'#fff'}> Login with email </Heading> </Center>
 
 			<Input
 				onChangeText={(email) => setLoginState( {...loginState, email})}
@@ -115,7 +110,13 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 				keyboardType="default"
 			/>
 
-			<Button onPress={onLoginEmail} > Log in </Button>
+			<Button style={styles.button} onPress={onLoginEmail} > Log in </Button>
+
+			<Center>
+				<Pressable pt='2' onPress={() => navigation.navigate('Register') }> 
+					<Text color={'#fff'}> Don't have an account? </Text> 
+				</Pressable>
+			</Center>
 
 			{/* TODO: Implement Google/FB sign-ins with https://github.com/react-native-google-signin/google-signin*/}
 			{/* <Divider bg="indigo.500" thickness="2" mx="2" /> */}
@@ -134,24 +135,23 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 				</HStack>
 			</Button> */}
 
-			<Center width='100%'>
-				<Pressable pt='5' onPress={() => navigation.navigate('Register') }> 
-					<Text> Dont have an account yet? </Text> 
-				</Pressable>
-			</Center>
-					
 			<Error> {loginError} </Error>
 		</AuthWrapper>
 	)
 }
 
-
-export default LoginScreen
-
-
 const styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		justifyContent: "center"
+	},
+	button: {
+		height: 40,
+		margin: 12,
+		borderWidth: 1,
+		padding: 10,
+		borderRadius: 50,
 	}
 })
+
+export default LoginScreen
