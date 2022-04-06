@@ -170,7 +170,6 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	
 	// Compress the photo to save bandwith on the server
 	const crunchPhoto = async () => {
-		// console.log('Initial size: ', await FileSystem.getInfoAsync(originalPhotoURI, {size: true}))
 		const options = setMaxDimention()
 		let optionsArray: Action[] = []
 
@@ -187,25 +186,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 		)
 		
 		setCrunchedPhoto(manipResult.uri)
-		// console.log('Compressed size: ', await FileSystem.getInfoAsync(manipResult.uri, {size: true}))
 	}
-
-	// const testLocations = async () => {
-	// 	setSendingReport(true)
-
-	// 	let newLoc = await getLocation()
-
-	// 	console.log('getLoc loc: ', newLoc)
-	// 	// console.log('Rich loc: ', richLocation?.address)
-
-	// 	setSendingReport(false)
-
-	// 	if (richLocation !== null && richLocation !== undefined) {
-	// 		alert(richLocation.address)
-	// 	} else {
-	// 		alert('problem')
-	// 	}
-	// }
 
 	const setMaxDimention = () => {
 		let len = photoExif.PixelYDimension || photoExif.ImageLength

@@ -1,15 +1,13 @@
 // Vendor
 import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Icon, IFabProps } from 'native-base'
 // Expo
 import { useIsFocused } from '@react-navigation/native'
 
-
 // UI
-import { Box, Button, Flex, Row } from 'native-base'
+import { Box } from 'native-base'
 
 //- Organisms
 import Feed from '../../Organisms/Feed'
@@ -19,26 +17,20 @@ import Map from '../../Organisms/Map'
 import { Screen } from '../../../interfaces/interfaces'
 import { TActionSheetItem } from '../../../interfaces/types'
 import FabMenu from '../../Molecules/FabMenu'
-import { getLocation } from '../../../helpers/location'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { setReports } from '../../../../redux/features/reports/reportsSlice'
 import { fetchAllReports } from '../../../../redux/features/reports/reportOperations'
 import { useAppDispatch } from '../../../../redux/features/hooks'
 
-const Tab = createNativeStackNavigator()
-const BTab = createBottomTabNavigator()
+const BTab = createMaterialBottomTabNavigator()
 
 const HomeScreen: React.FC<Screen> = ({navigation}) => {
-	// const loggedInUserEmail = useAppSelector(state => state.auth.user.email)
 	const isFocused = useIsFocused()
 	const dispatch = useAppDispatch()
 	
 	const fabIcon = (
 		<Icon color="white" as={<Ionicon name="add" />} size="md" />
 	)
-
-	// console.log('Nav: ', navigation.getState().index === 0)
-	// console.log('isFocused: ', isFocused)
 
 	// Get All reports on start
 	useEffect(() => {
@@ -51,7 +43,7 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 	const fab: IFabProps = {
 		position: 'absolute',
-		bg: 'tertiary.800',
+		bg: '#20d3ee',
 		size: "md",
 		icon: fabIcon
 	}
@@ -71,14 +63,8 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 
 	return (
 		<Box flex={1}>
-			{/* <Tab.Navigator>
-				<Tab.Screen name="Feed" options={{ headerShown: false }} component={Feed} />
-				<Tab.Screen name="Map" options={{ headerShown: false }} component={Map} />
-			</Tab.Navigator> */}
-
 			{
 				isFocused && (
-					// <ReportCTA navigation={navigation} />
 					<FabMenu 
 						fab={fab}
 						actionSheetTitle="Which photo would you like to use?"
@@ -87,34 +73,30 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 				)
 			}
 
-			<BTab.Navigator>
-				<BTab.Screen 
-					name="Feed" options={{ 
-						headerShown: false,
+				<BTab.Navigator
+					activeColor="#20d3ee"
+					inactiveColor="#0c4f59"
+					shifting={true}
+					barStyle={{ backgroundColor: '#0f2027' }}
+				>
+					<BTab.Screen 
+						name="Feed" options={{ 
+							tabBarIcon: () => (
+								<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="images-outline" />} size="sm" />
+							),
+						}} component={Feed} />
+					<BTab.Screen name="Map" options={{
 						tabBarIcon: () => (
-							<Icon color={isFocused ? "#20d3ee" : "amber.400"} as={<Ionicon name="images-outline" />} size="sm" />
+							<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="map-outline" />} size="sm" />
 						),
-					}} component={Feed} />
-				<BTab.Screen name="Map" options={{
-					headerShown: false,
-					tabBarIcon: () => (
-						<Icon color={isFocused ? "#20d3ee" : "amber.400"} as={<Ionicon name="map-outline" />} size="sm" />
-					),
-				}} component={Map} />
-			</BTab.Navigator>
-
-			{/* <Flex>
-				<Row>
-					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Map')}> Map </Button>
-					<Button w="50%" rounded='0' h='10' onPress={() => navigation.navigate('Feed')}> Feed </Button>
-				</Row>
-			</Flex> */}
+					}} component={Map} />
+				</BTab.Navigator>
 		</Box>
 	)
 }
 
 const styles = StyleSheet.create({
-
+	
 })
 
 export default HomeScreen

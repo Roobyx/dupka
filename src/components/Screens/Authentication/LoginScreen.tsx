@@ -48,7 +48,7 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 			// console.log('Trying to log user: ', res.user)
 
 			if( user ) {
-				console.log('successfully logged user: ', res.user.email)
+				// console.log('successfully logged user: ', res.user.email)
 				dispatch(setActiveUser(user))
 				navigation.navigate('Home')
 			}
@@ -70,7 +70,7 @@ const LoginScreen: React.FC<Screen> = ({navigation}) => {
 			const user = res.user
 
 			if( user ) {
-				console.log('successfully logged user: ', res.user.email)
+				// console.log('successfully logged user: ', res.user.email)
 				dispatch(setActiveUser(user))
 				navigation.navigate('Home')
 			}

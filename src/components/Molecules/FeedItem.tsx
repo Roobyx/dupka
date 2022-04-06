@@ -1,14 +1,15 @@
 // Vendor
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Share } from 'react-native'
-import { Box, Heading, Text, Image, AspectRatio, Center, Stack, HStack, Button, Modal } from 'native-base'
+import { Box, Heading, Text, Image, AspectRatio, Icon, Stack, HStack, Button, Modal, Spacer } from 'native-base'
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import Ionicon from 'react-native-vector-icons/Ionicons'
 
 // Firebase
 import { doc, setDoc, Timestamp } from 'firebase/firestore'
 import { db } from '../../../firebaseSetup'
-import { linkWithRedirect } from '@firebase/auth'
+// import { linkWithRedirect } from '@firebase/auth'
 
 // Redux
 import { useAppDispatch, useAppSelector } from '../../../redux/features/hooks'
@@ -49,13 +50,19 @@ const FeedItem = ({report}: TFeedItem) => {
 		if(report.rates) {
 			reportRated.current = report.rates.includes(userId)
 		}
+
 	}, [report])
 
 	const onShare = async () => {
+		const baseUrl = 'https://dupka-web.vercel.app/r:'
+
 		try {
 		  const result = await Share.share({
-			message: report.reportImage,
+			message: baseUrl + report.reportId,
 		});
+
+		console.log('Share URL: ', baseUrl + report.reportId);
+		
 		if (result.action === Share.sharedAction) {
 				if (result.activityType) {
 				// shared with activity type of result.activityType
@@ -144,11 +151,11 @@ const FeedItem = ({report}: TFeedItem) => {
 		<Box
 			rounded="lg"
 			overflow="hidden"
-			width="80"
+			width="110%"
 			shadow={1}
 			_light={{ backgroundColor: 'gray.50' }}
 			_dark={{ backgroundColor: 'gray.700' }}
-			style={{position: 'relative'}}
+			style={{position: 'relative', marginBottom: -30}}
 		>
 			{/* zIndex: '100' -> cannot be parsed */}
 			{
@@ -156,12 +163,12 @@ const FeedItem = ({report}: TFeedItem) => {
 					<LoadingIndicator spinnerOnly={true} style={{position: 'absolute'}}/>
 				)
 			}
-			<Box p='0'>
+			<Box>
 				<AspectRatio ratio={1 / 1}>
 					<Image source={{ uri: report.reportImage, }} alt="image" />
 				</AspectRatio>
 				
-				<Center
+				{/* <Center
 					bg="violet.500"
 					roundedTopRight='lg'
 					_text={{ color: 'white', fontWeight: '700', fontSize: 'xs' }}
@@ -171,11 +178,11 @@ const FeedItem = ({report}: TFeedItem) => {
 					py="2.5"
 				>
 					<Text color={'white'}>
-						Rating: { Math.round(report.rating * 100) / 100 } / 5
+						{ Math.round(report.rating * 100) / 100 } *
 					</Text>
-				</Center>
+				</Center> */}
 
-				{
+				{/* {
 					report.likes && (
 						<Center
 							bg='emerald.500'
@@ -192,35 +199,69 @@ const FeedItem = ({report}: TFeedItem) => {
 							</Text>
 						</Center>
 					)
-				}
+				} */}
 			</Box>
 		
-			<Stack p="4" space={3}>
-				<Heading size="md" ml="-1">
+			<Stack 
+				p="4" 
+				space={3}
+				background={'#2c5364'}
+			>
+				<Heading 
+					size="md"
+					ml="-1"
+					color={'#fff'}
+				>
 					{ report.address }
 				</Heading>
 
-				<Text
-					fontSize="xs"
-					_light={{ color: 'violet.500' }}
-					_dark={{ color: 'violet.300' }}
-					fontWeight="500"
-					ml="-0.5"
-					mt="-1"
-				>
-					{ reportTime }
-				</Text>
+				<HStack space={3} alignItems="center">
+					<Text
+						fontSize="xs"
+						_light={{ color: '#fff' }}
+						_dark={{ color: '#fff' }}
+						fontWeight="500"
+						ml="-0.5"
+						mt="-1"
+					>
+						{ reportTime }
+					</Text>
+					
+					<Spacer />
+
+					<HStack>
+						<Text
+							fontSize="xs"
+							_light={{ color: '#fff' }}
+							_dark={{ color: '#fff' }}
+							fontWeight="500"
+							ml="-0.5"
+							mt="-1"
+						>
+							{ Math.round(report.rating * 100) / 100 }
+						</Text>
+						<Icon style={styles.starIcon} color={"amber.400"} size='xs' as={<Ionicon name="star" />} />
+					</HStack>
+				</HStack>
 			</Stack>
 
 			<HStack alignItems="center">
-				{/* If report is liked dislike it */}
-				<Button rounded='none' w='33.33%' onPress={ () => { reportLiked.current ? likeAction(false) : likeAction(true)}}> 
+				{/* Temp removal of the like system */}
+				{/* <Button rounded='none' w='33.33%' onPress={ () => { reportLiked.current ? likeAction(false) : likeAction(true)}}> 
 					{ reportLiked.current ? 'Dislike' : 'Like' }
-				</Button>
-				<Button rounded='none' w='33.33%' onPress={ () => setShowModal(true) }> 
+				</Button> */}
+				<Button
+					rounded='none'
+					w='50%'
+					borderRightWidth={'1'}
+					borderRightColor={'#0f2027'}
+					style={reportRated.current && styles.buttonDisabled} 
+					disabled={reportRated.current}
+					onPress={ () => setShowModal(true) }
+				>
 					{ reportRated.current ? 'Rated' : 'Rate'}
 				</Button>
-				<Button rounded='none' w='33.33%' onPress={ onShare }> Share </Button>
+				<Button rounded='none' w='50%' onPress={ onShare }> Share </Button>
 			</HStack>
 
 			<Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -265,4 +306,13 @@ const FeedItem = ({report}: TFeedItem) => {
 
 export default FeedItem
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+	buttonDisabled: {
+		backgroundColor: '#4a7880',
+		opacity: 0.5
+	},
+	starIcon: {
+		marginLeft: 4,
+		marginTop: -4
+	}
+})

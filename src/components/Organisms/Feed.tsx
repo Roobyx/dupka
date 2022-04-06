@@ -7,6 +7,7 @@ import { Report } from '../../interfaces/interfaces'
 import FeedItem from '../Molecules/FeedItem'
 import LoadingIndicator from '../Molecules/LoadingIndicator'
 import { fetchAllReports } from '../../../redux/features/reports/reportOperations'
+import { LinearGradient } from 'expo-linear-gradient'
 
 const Feed = () => {
 	const allReports: Report[] = useAppSelector(getAllReports)
@@ -25,33 +26,46 @@ const Feed = () => {
 	}, [])
 
 	return (
-		<ScrollView
-			flex={1}
-			refreshControl={
-				<RefreshControl
-					refreshing={refreshing}
-					onRefresh={onRefresh}
-				/>
-			}
-		>
-			{ 
-				allReports.map(
-					(report) => {
-						return (
-							report.status === 'approved' && (
-								<Center key={report.reportId} p='30'>
-									{/* <FeedItem reportId={report.reportId} address={report.address} timestamp={report.timestamp} imageUri={report.reportImage} rating={report.rating} /> */}
-									<FeedItem report={report} />
-								</Center>
+		<LinearGradient
+				colors={['#2c5364', '#203a43', '#0f2027']}
+				style={styles.background}
+			>
+			<ScrollView
+				// flex={1}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+					/>
+				}
+			>
+				{ 
+					allReports.map(
+						(report) => {
+							return (
+								report.status === 'approved' && (
+									<Center key={report.reportId} p='30'>
+										{/* <FeedItem reportId={report.reportId} address={report.address} timestamp={report.timestamp} imageUri={report.reportImage} rating={report.rating} /> */}
+										<FeedItem report={report} />
+									</Center>
+								)
 							)
-						)
-					}
-				)
-			}
-		</ScrollView>
+						}
+					)
+				}
+			</ScrollView>
+		</LinearGradient>
 	)
 }
 
-export default Feed
+const styles = StyleSheet.create({
+	background: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		height: '100%',
+	},
+})
 
-const styles = StyleSheet.create({})
+export default Feed

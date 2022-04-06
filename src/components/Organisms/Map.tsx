@@ -96,7 +96,7 @@ const Map = () => {
 	
 	const mapToggleFab: IFabProps = {
 		position: 'absolute',
-		bg: 'tertiary.800',
+		bg: '#20d3ee',
 		size: "md",
 		icon: fabIcon
 	}
@@ -105,14 +105,9 @@ const Map = () => {
 		return report.status === 'approved'
 	})
 
-
-	// console.log('All: ', allReports.length)
-	// console.log('Approved Only: ', approvedReports.length)
-
 	return (
 		// TODO: Make sure lat/long is NOT undefined before rendring this
 		<Box flex={1} style={styles.container}>
-
 		{
 			loading ? (
 				<LoadingIndicator />

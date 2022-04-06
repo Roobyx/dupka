@@ -25,7 +25,7 @@ const Landing: React.FC<Screen> = ({navigation}) => {
 			const user = JSON.parse(JSON.stringify(res.user))
 			
 			if( user ) {
-				console.log('successfully logged user: ', res.user.email)
+				// console.log('successfully logged user: ', res.user.email)
 				dispatch(setActiveUser(user))
 				navigation.navigate('Home')
 			}

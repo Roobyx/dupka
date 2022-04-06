@@ -41,6 +41,7 @@ The app's main idea is to have users create reports with photos and share them o
 Each of the features is developped and working for both iOS and Android
 
 ## Feature Roadmap:
+- Ability to report that a previously reported issue has been fixed (with photo proof)
 - Properly refactor the atomic design structure
 - ~~Annonymus firebase login~~
 - Face detection on storage photos
@@ -51,6 +52,7 @@ Each of the features is developped and working for both iOS and Android
 - Personal feed
 - Skip admin approval request on proper reports
 - Notifications for reports that await admin approval
+- ~~Better design~~
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch

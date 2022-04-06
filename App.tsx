@@ -2,8 +2,8 @@
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Badge, Center, HStack, NativeBaseProvider, Pressable, Text } from 'native-base'
-import Icon from 'react-native-vector-icons/Entypo'
+import { Badge, HStack, NativeBaseProvider, Pressable, Text, Icon } from 'native-base'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Platform, StyleSheet } from 'react-native'
 import { LogBox } from 'react-native'
@@ -34,6 +34,7 @@ import CreateReportScreen from './src/components/Screens/Report/CreateReportScre
 //- Molecules
 import LoadingIndicator from './src/components/Molecules/LoadingIndicator'
 import AdminFeed from './src/components/Organisms/AdminFeed'
+import Profile from './src/components/Organisms/Profile'
 import { getUnnaprovedReportsCount, setReports } from './redux/features/reports/reportsSlice'
 import { fetchAllReports } from './redux/features/reports/reportOperations'
 
@@ -56,26 +57,24 @@ const Index = () => {
 	const isAdmin = useAppSelector(checkIsAdmin)
 	console.log('Is admin: ', isAdmin)
 
-		
-
-	
 	// Get All reports on start
 	useEffect(() => {
-		(async () => {
-			const fetchedReports = await fetchAllReports()
-			const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
-			dispatch(setReports(parsedReports))
-		})()
+		try {
+			(async () => {
+				const fetchedReports = await fetchAllReports()
+				const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+				dispatch(setReports(parsedReports))
+			})()
+		} catch(e) {
+			console.log('Error on getting all reports: ', e);
+		}
 
 		console.log('APP.ts useEffect')
 
 	}, [])
 
-	
-
 	// Count the pending ones
 	const unapprovedReprotsCount = useAppSelector(getUnnaprovedReportsCount)
-
 
 	// Sign the user out on demand
 	// Clear the local state
@@ -89,12 +88,6 @@ const Index = () => {
 		persistor.purge()
 		console.log('Logged out')
 	}
-
-	const NaviageAdminFeed = (navigation: any) => {
-		navigation.navigate('AdminFeed')
-	}
-
-
 	return (
 		<>
 		{
@@ -104,43 +97,57 @@ const Index = () => {
 						{ 
 							loggedInState ? (
 								<>
-									<Stack.Screen name="Home" component={HomeScreen} options={({ navigation, route }) => ({
-										headerBackVisible: false,
-										headerBackButtonMenuEnabled: false,
-											headerRight: () => {
-												return (
-													<>
-														{isAdmin && (
-															<Pressable px='4' onPress={() => navigation.navigate('AdminFeed')}>
-																<HStack>
-																	<Badge colorScheme="info"
-																			rounded="999px"
-																			zIndex={1}
-																			mr={2}
-																			variant="outline"
-																			alignSelf="flex-end"
-																			_text={{
-																				fontSize: 6,
-																			}}
-																	>
-																		<Text> {unapprovedReprotsCount} </Text>
-																	</Badge>
+									<Stack.Screen name="Home" component={HomeScreen} 
+										options={({ navigation, route }) => ({
+											headerBackVisible: false,
+											headerBackButtonMenuEnabled: false,
+											headerStyle: {
+												backgroundColor: '#203a43',
+											},
+											headerTintColor: '#fff',
+											headerTitleStyle: {
+												fontWeight: 'bold',
+											},
+												headerRight: () => {
+													return (
+														<>
+															{isAdmin && (
+																<Pressable px='4' onPress={() => navigation.navigate('AdminFeed')}>
+																	<HStack>
+																		<Badge colorScheme="info"
+																				rounded="999px"
+																				zIndex={1}
+																				mr={2}
+																				variant="outline"
+																				alignSelf="flex-end"
+																				_text={{
+																					fontSize: 6,
+																				}}
+																		>
+																			<Text> {unapprovedReprotsCount} </Text>
+																		</Badge>
 
-																	<Icon name="inbox" size={24}/>
-																</HStack>
+																		<Icon color={'#fff'} size='sm' as={
+																			<Ionicon name="beer-outline" />
+																		} />
+																	</HStack>
+																</Pressable>
+															)}
+
+															<Pressable onPress={() => navigation.navigate('Profile', {SignOut})} mr='10px'>
+																<Icon color={'#fff'} size='sm' as={
+																	<Ionicon name="person-circle-outline" />
+																} />
 															</Pressable>
-														)}
-
-														<Pressable onPress={SignOut}>
-															<Icon name="log-out" size={20}/>
-														</Pressable>
-													</>
-											)},
-										})}
+														</>
+												)},
+											}
+										)}
 									/>
 									<Stack.Screen name="AddPhoto" component={AddPhotoScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="BrowsePhoto" component={BrowsePhotoScreen} options={{ headerShown: false }} />
 									<Stack.Screen name="CreateReport" component={CreateReportScreen} />
+									<Stack.Screen name="Profile" component={Profile} />
 
 									{
 										isAdmin &&  <Stack.Screen name="AdminFeed" component={AdminFeed} />

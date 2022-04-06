@@ -30,7 +30,6 @@ export const authSlice = createSlice({
 		logUserOut: (state) => {
 			state.user = null
 			state.loggedIn = false
-			console.log('Set redux state to logged out: ', state)
 		}
 	}
 })

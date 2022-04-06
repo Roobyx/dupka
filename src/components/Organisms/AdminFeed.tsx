@@ -85,7 +85,6 @@ const AdminFeed = () => {
 		</ScrollView>
 	)
 }
+const styles = StyleSheet.create({})
 
 export default AdminFeed
-
-const styles = StyleSheet.create({})
