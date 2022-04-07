@@ -40,19 +40,24 @@ The app's main idea is to have users create reports with photos and share them o
 
 Each of the features is developped and working for both iOS and Android
 
-## Feature Roadmap:
-- Ability to report that a previously reported issue has been fixed (with photo proof)
-- Properly refactor the atomic design structure
+## Current roadmap:
+1. Profile page
+~~- Easier logout button~~
+- T&C and PP links
+2. Report templates - Ability to pre-defined reason for the report
+3. Ability to report that a previously reported issue has been fixed (with photo proof)
+4. Personal feed
+
+## Planned features:
 - ~~Annonymus firebase login~~
+- ~~Better design~~
+- ~~ Feed sorting by report date ~~
+- Properly refactor the atomic design structure
 - Face detection on storage photos
 - Face blurring before upload
 - Feed filters
 - Feed search
-- Report templates
-- Personal feed
-- Skip admin approval request on proper reports
 - Notifications for reports that await admin approval
-- ~~Better design~~
 
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch

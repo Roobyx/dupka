@@ -1,5 +1,5 @@
 // Vendor
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Badge, HStack, NativeBaseProvider, Pressable, Text, Icon } from 'native-base'
@@ -56,6 +56,19 @@ const Index = () => {
 
 	const isAdmin = useAppSelector(checkIsAdmin)
 	console.log('Is admin: ', isAdmin)
+	
+	const [shouldSignOut, setShouldSignOut] = useState(false)
+
+	useEffect(() => {
+		console.log('UE sign in')
+		setShouldSignOut(false)
+	}, [])
+
+	useEffect(() => {
+		console.log('UE sign out')
+		
+		if(shouldSignOut) SignOut()
+	}, [shouldSignOut])
 
 	// Get All reports on start
 	useEffect(() => {
@@ -70,7 +83,6 @@ const Index = () => {
 		}
 
 		console.log('APP.ts useEffect')
-
 	}, [])
 
 	// Count the pending ones
@@ -88,87 +100,114 @@ const Index = () => {
 		persistor.purge()
 		console.log('Logged out')
 	}
+
 	return (
 		<>
-		{
-			loaded ? (
-				<NavigationContainer>
-					<Stack.Navigator initialRouteName='Home'>
-						{ 
-							loggedInState ? (
-								<>
-									<Stack.Screen name="Home" component={HomeScreen} 
-										options={({ navigation, route }) => ({
-											headerBackVisible: false,
-											headerBackButtonMenuEnabled: false,
-											headerStyle: {
-												backgroundColor: '#203a43',
-											},
-											headerTintColor: '#fff',
-											headerTitleStyle: {
-												fontWeight: 'bold',
-											},
-												headerRight: () => {
-													return (
-														<>
-															{isAdmin && (
-																<Pressable px='4' onPress={() => navigation.navigate('AdminFeed')}>
-																	<HStack>
-																		<Badge colorScheme="info"
-																				rounded="999px"
-																				zIndex={1}
-																				mr={2}
-																				variant="outline"
-																				alignSelf="flex-end"
-																				_text={{
-																					fontSize: 6,
-																				}}
-																		>
-																			<Text> {unapprovedReprotsCount} </Text>
-																		</Badge>
+			{
+				loaded ? (
+					<NavigationContainer>
+						<Stack.Navigator initialRouteName='Home'>
+							{ 
+								loggedInState ? (
+									<>
+										<Stack.Screen name="Home" component={HomeScreen} 
+											options={({ navigation, route }) => ({
+												headerBackVisible: false,
+												headerBackButtonMenuEnabled: false,
+												headerStyle: {
+													backgroundColor: '#203a43',
+												},
+												headerTintColor: '#fff',
+												headerTitleStyle: {
+													fontWeight: 'bold',
+												},
+													headerRight: () => {
+														return (
+															<>
+																{isAdmin && (
+																	<Pressable px='4' onPress={() => navigation.navigate('Beer Feed')}>
+																		<HStack>
+																			<Badge colorScheme="info"
+																					rounded="999px"
+																					zIndex={1}
+																					mr={2}
+																					variant="outline"
+																					alignSelf="flex-end"
+																					_text={{
+																						fontSize: 6,
+																					}}
+																			>
+																				<Text> {unapprovedReprotsCount} </Text>
+																			</Badge>
 
-																		<Icon color={'#fff'} size='sm' as={
-																			<Ionicon name="beer-outline" />
-																		} />
-																	</HStack>
+																			<Icon color={'#fff'} size='sm' as={
+																				<Ionicon name="beer-outline" />
+																			} />
+																		</HStack>
+																	</Pressable>
+																)}
+
+																<Pressable onPress={
+																	() => navigation.navigate('Profile', {
+																		setShouldSignOut: setShouldSignOut
+																	})
+																} mr='10px'>
+																	<Icon color={'#fff'} size='sm' as={
+																		<Ionicon name="person-circle-outline" />
+																	} />
 																</Pressable>
-															)}
+															</>
+													)},
+												}
+											)}
+										/>
+										<Stack.Screen name="Add Photo" component={AddPhotoScreen} options={{ headerShown: false }} />
+										<Stack.Screen name="Browse Photo" component={BrowsePhotoScreen} options={{ headerShown: false }} />
+										<Stack.Screen name="Create Report" component={CreateReportScreen} 
+											options={() => ({
+												headerStyle: {
+													backgroundColor: '#203a43',
+												},
+												headerTintColor: '#fff',
+												headerTitleStyle: {
+													fontWeight: 'bold',
+												},
+											})}
+										/>
 
-															<Pressable onPress={() => navigation.navigate('Profile', {SignOut})} mr='10px'>
-																<Icon color={'#fff'} size='sm' as={
-																	<Ionicon name="person-circle-outline" />
-																} />
-															</Pressable>
-														</>
-												)},
-											}
-										)}
-									/>
-									<Stack.Screen name="AddPhoto" component={AddPhotoScreen} options={{ headerShown: false }} />
-									<Stack.Screen name="BrowsePhoto" component={BrowsePhotoScreen} options={{ headerShown: false }} />
-									<Stack.Screen name="CreateReport" component={CreateReportScreen} />
-									<Stack.Screen name="Profile" component={Profile} />
 
-									{
-										isAdmin &&  <Stack.Screen name="AdminFeed" component={AdminFeed} />
-									}
-								</>
-							) : (
-								<>
-									<Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
-									<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-									<Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
-								</>
-							)
-						}
-					</Stack.Navigator>
-				</NavigationContainer>
+										<Stack.Screen name="Profile" component={Profile} 
+											options={() => ({
+												headerStyle: {
+													backgroundColor: '#203a43',
+												},
+												headerTintColor: '#fff',
+												headerTitleStyle: {
+													fontWeight: 'bold',
+												},
+											})}
+										/>
 
-			) : (
+										{
+											isAdmin &&  <Stack.Screen name="AdminFeed" component={AdminFeed} />
+										}
+									</>
+								) : (
+									<>
+										<Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false }} />
+										<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+										<Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
+									</>
+								)
+							}
+						</Stack.Navigator>
+					</NavigationContainer>
 
-				<LoadingIndicator />
-			)
-		}
+				) : (
+
+					<LoadingIndicator />
+				)
+			}
 		</>
 	)
 }

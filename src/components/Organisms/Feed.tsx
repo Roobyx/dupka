@@ -1,13 +1,14 @@
 import React from 'react'
 import { StyleSheet, RefreshControl } from 'react-native'
-import { Center, ScrollView, Image, Heading } from 'native-base'
+import { Center, ScrollView } from 'native-base'
 import { getAllReports, setReports } from '../../../redux/features/reports/reportsSlice'
 import { useAppDispatch, useAppSelector } from '../../../redux/features/hooks'
 import { Report } from '../../interfaces/interfaces'
 import FeedItem from '../Molecules/FeedItem'
-import LoadingIndicator from '../Molecules/LoadingIndicator'
+// import LoadingIndicator from '../Molecules/LoadingIndicator'
 import { fetchAllReports } from '../../../redux/features/reports/reportOperations'
 import { LinearGradient } from 'expo-linear-gradient'
+import { orderBy } from 'lodash'
 
 const Feed = () => {
 	const allReports: Report[] = useAppSelector(getAllReports)
@@ -15,7 +16,8 @@ const Feed = () => {
 
 	const updateReports = async () => {
 		const fetchedReports = await fetchAllReports()
-		const parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+		let parsedReports = JSON.parse(JSON.stringify(fetchedReports))
+		parsedReports = orderBy(parsedReports, ['timestamp.seconds'], ['asc'])
 		dispatch(setReports(parsedReports))
 	}
 	const [refreshing, setRefreshing] = React.useState(false);
@@ -27,9 +29,9 @@ const Feed = () => {
 
 	return (
 		<LinearGradient
-				colors={['#2c5364', '#203a43', '#0f2027']}
-				style={styles.background}
-			>
+			colors={['#2c5364', '#203a43', '#0f2027']}
+			style={styles.background}
+		>
 			<ScrollView
 				// flex={1}
 				refreshControl={
