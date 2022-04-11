@@ -52,7 +52,8 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 	useEffect(() => {
 		(async () => {
-			const { status } = await Camera.requestPermissionsAsync()
+			// const { status } = await Camera.requestPermissionsAsync()
+			const { status } = await Camera.requestCameraPermissionsAsync()
 			setHasPermission(status === 'granted')
 		})()
 	}, [])
@@ -156,9 +157,9 @@ const TakePhotoScreen = ({navigation}: any) => {
 							onFacesDetected={handleFaceDetection}
 							// onFaceDetectionError={this.handleFaceDetectionError}
 							faceDetectorSettings={{
-								mode: FaceDetector.Constants.Mode.accurate,
-								detectLandmarks: FaceDetector.Constants.Landmarks.all,
-								runClassifications: FaceDetector.Constants.Classifications.none,
+								mode: FaceDetector.FaceDetectorMode.accurate,
+								detectLandmarks: FaceDetector.FaceDetectorLandmarks.all,
+								runClassifications: FaceDetector.FaceDetectorClassifications.none,
 							}}
 
 						/>
@@ -196,7 +197,6 @@ const TakePhotoScreen = ({navigation}: any) => {
 			}
 			
 			<HStack h="20%" alignItems="center" style={styles.actionsRow}>
-				
 				{
 					photoPath ? (
 						<>
@@ -210,7 +210,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 							<Pressable
 								w='20'
-								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'camera', faceDetected })}>
+								onPress={() => navigation.navigate('Create Report', { photoPath, photoExif, origin: 'camera', faceDetected })}>
 
 								<Center>
 									<Text style={styles.text}> Save </Text>

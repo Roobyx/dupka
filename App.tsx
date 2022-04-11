@@ -57,18 +57,12 @@ const Index = () => {
 	const isAdmin = useAppSelector(checkIsAdmin)
 	console.log('Is admin: ', isAdmin)
 	
-	const [shouldSignOut, setShouldSignOut] = useState(false)
-
+	// Trigger signout func in order to clear the persisted state
 	useEffect(() => {
-		console.log('UE sign in')
-		setShouldSignOut(false)
-	}, [])
-
-	useEffect(() => {
-		console.log('UE sign out')
-		
-		if(shouldSignOut) SignOut()
-	}, [shouldSignOut])
+		if(!loggedInState) {
+			SignOut()
+		}
+	}, [loggedInState])
 
 	// Get All reports on start
 	useEffect(() => {
@@ -94,7 +88,7 @@ const Index = () => {
 	// Purge the persisted state
 	const SignOut = async () => {
 		await auth.signOut()
-		dispatch(logUserOut())
+		// dispatch(logUserOut())
 
 		// TODO: Should this be here or in an action? / Should it purge everything?
 		persistor.purge()
@@ -148,9 +142,7 @@ const Index = () => {
 																)}
 
 																<Pressable onPress={
-																	() => navigation.navigate('Profile', {
-																		setShouldSignOut: setShouldSignOut
-																	})
+																	() => navigation.navigate('Profile')
 																} mr='10px'>
 																	<Icon color={'#fff'} size='sm' as={
 																		<Ionicon name="person-circle-outline" />

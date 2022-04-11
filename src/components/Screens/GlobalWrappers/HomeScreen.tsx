@@ -50,9 +50,9 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 	
 	const openPhotoScreen = (screen: string) => {
 		screen === 'takePhoto' ? (
-			navigation.navigate('AddPhoto')
+			navigation.navigate('Add Photo')
 		) : (
-			navigation.navigate('BrowsePhoto')
+			navigation.navigate('Browse Photo')
 		)
 	}
 

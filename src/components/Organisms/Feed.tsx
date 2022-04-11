@@ -33,7 +33,6 @@ const Feed = () => {
 			style={styles.background}
 		>
 			<ScrollView
-				// flex={1}
 				refreshControl={
 					<RefreshControl
 						refreshing={refreshing}

@@ -13,7 +13,7 @@ import {
 	PURGE,
 	REGISTER,
 } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
+// import storage from 'redux-persist/lib/storage'
 
 // Slices
 import authSlice from "./features/auth/authSlice"

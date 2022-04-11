@@ -1,60 +1,163 @@
-import React, { useState } from 'react'
-import { StyleSheet, Image } from 'react-native'
-import { Box, Button, Text, Center } from 'native-base'
+import React, { Fragment, ReactChildren } from 'react'
+import { StyleSheet, Image, Pressable } from 'react-native'
+import { Box, Button, Text, Center, Icon, ScrollView, HStack, Divider, Heading, Link } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
-import icon from '../../../assets/icon.png'
+import { getFullUserData, logUserOut } from '../../../redux/features/auth/authSlice'
+import { useAppDispatch, useAppSelector } from '../../../redux/features/hooks'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 
-interface IProfile {
-	route: any
-	navigation: any
+type Props = {
+	text?: string
+	borders?: boolean
+	topBorderOnly?: boolean
+	bottomBorderOnly?: boolean
+	iconName?: string
+	action?: () => void
+	href?: string
+};
+
+const Action: React.FC<Props> = ({
+	text,
+	action,
+	iconName,
+	href,
+	borders = false,
+	topBorderOnly = false,
+	bottomBorderOnly = false,
+}) => {
+	
+	const content = () => (
+		<>
+			{ (borders || topBorderOnly) && <Divider my="2" /> }
+			<HStack
+				justifyContent={'space-between'}
+			>
+				<HStack>
+					{
+						iconName && (
+							<Icon mr="1.5" color={'#fff'} size='sm' as={
+								<Ionicon name={iconName} />
+							} />
+						)
+					}
+
+					{text}
+				</HStack>
+
+				{
+					iconName && (
+						<Icon mr="1.5" color={'#fff'} size='sm' as={
+							<Ionicon name={'chevron-forward-outline'} />
+						} />
+					)
+				}
+			</HStack>
+			{ (borders || bottomBorderOnly) && <Divider my="2" /> }
+		</>
+	)
+
+	if (action) {
+		return (
+			<Box my="3">
+				{ content }
+			</Box>
+		)
+	} else if(href) {
+		return (
+			<Link 
+				_text={{
+					color: "#fff"
+				}}
+				href={href}
+			>
+				{ content }
+			</Link>
+		)
+	} else {
+		return (
+			<>
+				{ content }
+			</>
+		)
+	}
+
 }
 
-const Profile = ({navigation, route}: IProfile) => {
-	const IconImage = Image.resolveAssetSource(icon)
-
-	// const [signOutFunction, onSignOutFunction] = useState(route.params.signOut);
+const Profile = () => {
+	const dispatch = useAppDispatch()
+	const loggedInUser = useAppSelector(getFullUserData)
+	const logout = () => {
+		dispatch(logUserOut())
+	}
+	console.log('UseR: ', loggedInUser.isAnonymous);
 
 	return (
-		// <Box flex={1}>
-		// 	<HStack>
-				// <Button rounded='none' w='50%' onPress={ signOutFunction }> 
-				// 	<Icon color={'#fff'} size='sm' as={
-				// 		<Ionicon name="log-out-outline" />
-				// 	} />
-				// 	<Text> Logout </Text>
-				// </Button>
-
-		// 	</HStack>
-
-
-
-		// 	<Box>
-		// 		v.0.0.1
-		// 	</Box>
-		// </Box>
-
 		<LinearGradient
 			colors={['#2c5364', '#203a43', '#0f2027']}
 			style={styles.background}
 		>
-
-			<Box width='100%' px='10' py='20' flex={1}>
-				<Center flex={1.5}>
-					<Button rounded='none' w='50%' onPress={ route.params.setShouldSignOut }> 
-						{/* <Icon color={'#fff'} size='sm' as={
-							<Ionicon name="log-out-outline" />
-						} /> */}
-						<Text> Logout </Text>
-					</Button>
-				</Center>
-				
+			<ScrollView
+				p={10}
+			>
 				<Box>
-					<Text> Privacy Policy</Text>
-					<Text> Terms and Conditions</Text>
+					{/* <HStack>
+						<Icon color={'#fff'} size='xl' as={
+							<Ionicon name="person-circle-outline" />
+						} />
+						{ loggedInUser.isAnonymous && <Text> Anonymous </Text> }
+					</HStack> */}
+
+					<Action>
+						<>
+							<Icon color={'#fff'} size='xl' as={
+								<Ionicon name="person-circle-outline" />
+							} />
+							{ loggedInUser.isAnonymous && (
+								<Text fontSize="2xl" color={'#fff'}> Anonymous </Text>
+							)}
+						</>
+					</Action>
+
+
+					<Heading 
+						my="5"
+						color="#fff"
+					>
+						Legal
+					</Heading>
+
+					<Action 
+						bottomBorderOnly
+						iconName='link'
+						text='Privacy Policy'
+						href='#'
+					>
+					</Action>
+					<Action 
+						bottomBorderOnly
+						iconName='link'
+						text='Terms and conditions'
+						href='#'
+					>
+					</Action>
+					
+					<Heading 
+						my="5"
+						color="#fff"
+					>
+						Actions
+					</Heading>
+
+					<Action 
+						bottomBorderOnly
+						iconName='log-out-outline'
+						action={() => logout() }
+						text='Logout'
+					>
+					</Action>
 				</Box>
 				
-				<Image style={styles.iconImage} resizeMode='contain' source={ IconImage } />
-			</Box>
+			</ScrollView>
 		</LinearGradient>
 	)
 }

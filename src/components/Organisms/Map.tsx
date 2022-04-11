@@ -80,7 +80,7 @@ const Map = () => {
 			dispatch(setReports(parsedReports))
 		})()
 
-		console.log('Map.ts useEffect')
+		// console.log('Map.ts useEffect')
 
 	}, [])
 
@@ -126,10 +126,10 @@ const Map = () => {
 								{
 									approvedReports && (
 										approvedReports.map((report, index) => {
-											console.log('report: ', { 
-												latitude: report.location.coords.latitude, 
-												longitude: report.location.coords.longitude 
-											})
+											// console.log('report: ', { 
+											// 	latitude: report.location.coords.latitude, 
+											// 	longitude: report.location.coords.longitude 
+											// })
 
 											{/* TODO: Custom tooltip */}
 												{/* <Marker
