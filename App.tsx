@@ -1,5 +1,5 @@
 // Vendor
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Badge, HStack, NativeBaseProvider, Pressable, Text, Icon } from 'native-base'
@@ -134,7 +134,7 @@ const Index = () => {
 																				<Text> {unapprovedReprotsCount} </Text>
 																			</Badge>
 
-																			<Icon color={'#fff'} size='sm' as={
+																			<Icon color={'#fff'} size='lg' as={
 																				<Ionicon name="beer-outline" />
 																			} />
 																		</HStack>
@@ -144,7 +144,7 @@ const Index = () => {
 																<Pressable onPress={
 																	() => navigation.navigate('Profile')
 																} mr='10px'>
-																	<Icon color={'#fff'} size='sm' as={
+																	<Icon color={'#fff'} size='lg' as={
 																		<Ionicon name="person-circle-outline" />
 																	} />
 																</Pressable>

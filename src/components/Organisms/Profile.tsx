@@ -1,4 +1,4 @@
-import React, { Fragment, ReactChildren } from 'react'
+import React, { Children, Fragment, ReactChildren } from 'react'
 import { StyleSheet, Image, Pressable } from 'react-native'
 import { Box, Button, Text, Center, Icon, ScrollView, HStack, Divider, Heading, Link } from 'native-base'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -24,59 +24,69 @@ const Action: React.FC<Props> = ({
 	borders = false,
 	topBorderOnly = false,
 	bottomBorderOnly = false,
+	...rest
 }) => {
-	
-	const content = () => (
-		<>
-			{ (borders || topBorderOnly) && <Divider my="2" /> }
+	const content = (
+		<HStack
+			width='full'
+			height='6'
+			justifyContent={'space-between'}
+		>
 			<HStack
-				justifyContent={'space-between'}
+				alignItems='center'
 			>
-				<HStack>
-					{
-						iconName && (
-							<Icon mr="1.5" color={'#fff'} size='sm' as={
-								<Ionicon name={iconName} />
-							} />
-						)
-					}
-
-					{text}
-				</HStack>
-
 				{
 					iconName && (
-						<Icon mr="1.5" color={'#fff'} size='sm' as={
-							<Ionicon name={'chevron-forward-outline'} />
+						<Icon mr="1.5" color={'#fff'} size='md' as={
+							<Ionicon name={iconName} />
 						} />
 					)
 				}
+
+				<Text
+					color={'#fff'}>
+						{text}
+				</Text>
 			</HStack>
-			{ (borders || bottomBorderOnly) && <Divider my="2" /> }
-		</>
+
+			{
+				iconName && (
+					<Icon mr="1.5" color={'#fff'} size='md' as={
+						<Ionicon name={'chevron-forward-outline'} />
+					} />
+				)
+			}
+		</HStack>
 	)
 
 	if (action) {
 		return (
-			<Box my="3">
+			<Pressable
+				onPress={action}
+			>
+				{ (borders || topBorderOnly) && <Divider my="2" /> }
 				{ content }
-			</Box>
+				{ (borders || bottomBorderOnly) && <Divider my="2" /> }
+			</Pressable>
 		)
 	} else if(href) {
 		return (
-			<Link 
-				_text={{
-					color: "#fff"
-				}}
-				href={href}
-			>
-				{ content }
-			</Link>
+			<>
+				{ (borders || topBorderOnly) && <Divider my="2" /> }
+				<Link
+					href={href}
+				>
+					{ content }
+				</Link>
+				{ (borders || bottomBorderOnly) && <Divider my="2" /> }
+			</>
 		)
 	} else {
 		return (
 			<>
-				{ content }
+				{ (borders || topBorderOnly) && <Divider my="2" /> }
+				{ rest.children }
+				{ (borders || bottomBorderOnly) && <Divider my="2" /> }
 			</>
 		)
 	}
@@ -84,12 +94,13 @@ const Action: React.FC<Props> = ({
 }
 
 const Profile = () => {
+
 	const dispatch = useAppDispatch()
 	const loggedInUser = useAppSelector(getFullUserData)
+	
 	const logout = () => {
 		dispatch(logUserOut())
 	}
-	console.log('UseR: ', loggedInUser.isAnonymous);
 
 	return (
 		<LinearGradient
@@ -100,16 +111,9 @@ const Profile = () => {
 				p={10}
 			>
 				<Box>
-					{/* <HStack>
-						<Icon color={'#fff'} size='xl' as={
-							<Ionicon name="person-circle-outline" />
-						} />
-						{ loggedInUser.isAnonymous && <Text> Anonymous </Text> }
-					</HStack> */}
-
 					<Action>
 						<>
-							<Icon color={'#fff'} size='xl' as={
+							<Icon color={'#fff'} size='6xl' as={
 								<Ionicon name="person-circle-outline" />
 							} />
 							{ loggedInUser.isAnonymous && (
@@ -130,14 +134,14 @@ const Profile = () => {
 						bottomBorderOnly
 						iconName='link'
 						text='Privacy Policy'
-						href='#'
+						href='https://dupka-web.vercel.app/'
 					>
 					</Action>
-					<Action 
+					<Action
 						bottomBorderOnly
 						iconName='link'
 						text='Terms and conditions'
-						href='#'
+						href='https://dupka-web.vercel.app/'
 					>
 					</Action>
 					
@@ -151,7 +155,7 @@ const Profile = () => {
 					<Action 
 						bottomBorderOnly
 						iconName='log-out-outline'
-						action={() => logout() }
+						action={logout}
 						text='Logout'
 					>
 					</Action>
