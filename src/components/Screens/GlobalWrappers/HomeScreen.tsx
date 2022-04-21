@@ -82,12 +82,12 @@ const HomeScreen: React.FC<Screen> = ({navigation}) => {
 					<BTab.Screen 
 						name="Feed" options={{ 
 							tabBarIcon: () => (
-								<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="images-outline" />} size="sm" />
+								<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="images-outline" />} size="md" />
 							),
 						}} component={Feed} />
 					<BTab.Screen name="Map" options={{
 						tabBarIcon: () => (
-							<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="map-outline" />} size="sm" />
+							<Icon color={isFocused ? "#fff" : "amber.400"} as={<Ionicon name="map-outline" />} size="md" />
 						),
 					}} component={Map} />
 				</BTab.Navigator>

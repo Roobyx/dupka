@@ -4,8 +4,7 @@ import { StyleSheet } from 'react-native'
 import { Fab, Actionsheet, Box, Text, useDisclose} from 'native-base'
 // Types & Interfaces
 import { IFabMenu } from '../../interfaces/interfaces'
-import { boxShadow } from 'styled-system'
-
+import ActionSheetContainer from './ActionSheetContainer'
 
 const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 	const { isOpen, onOpen, onClose } = useDisclose()
@@ -13,18 +12,19 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 	return (
 		<>
 			<Fab
-				// style={styles.fabExtra}
 				position={fab.position}
 				bg={fab.bg}
 				size={fab.size}
-				// shadow={'none'}
 				// Fab icon example: <Icon color="white" as={<Ionicon name="add" />} size="md" />
 				icon={fab.icon}
 				onPress={onOpen}
 			/>
 
-			<Actionsheet isOpen={isOpen} onClose={onClose}>
-				{/* TODO: Export ActionSheet options to make it configurable from outside */}
+			<ActionSheetContainer 
+				actionSheetTitle = {actionSheetTitle} 
+				actionSheetItems = {actionSheetItems}
+			/>
+			{/* <Actionsheet isOpen={isOpen} onClose={onClose}>
 				<Actionsheet.Content>
 					<Box w="100%" h={60} px={4} justifyContent="center">
 						<Text fontSize="16"
@@ -46,7 +46,7 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 					}
 					<Actionsheet.Item onPress={onClose}><Text>Cancel</Text></Actionsheet.Item>
 				</Actionsheet.Content>
-			</Actionsheet>
+			</Actionsheet> */}
 		</>
 	)
 }
@@ -54,8 +54,4 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 export default FabMenu
 
 const styles = StyleSheet.create({
-	// fabExtra: {
-	// 	borderWidth: 10,
-	// 	borderColor: '#fff'
-	// }
 })

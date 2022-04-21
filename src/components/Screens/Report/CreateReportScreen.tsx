@@ -1,7 +1,7 @@
 // Vendor
 import React, { useEffect, useState } from 'react'
 import { Platform, StyleSheet, Alert } from 'react-native'
-import { Box, Image, Button, Center, Text, Heading} from 'native-base'
+import { Box, Image, Button, Center, Text, Heading, Select } from 'native-base'
 import 'react-native-get-random-values'
 import { v4 as uuid } from 'uuid'
 
@@ -38,6 +38,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 	const db = FBDB
 	const [sendingReport, setSendingReport] = useState(false)
 	const [uploadProgress, setUploadProgress] = useState(0)
+	const [reportReason, setReportReason] = React.useState("");
 	const [photoExif, setPhotoExif] = useState(route.params.photoExif)
 	const [richLocation, setRichLocation] = useState<RichLocationObject | null>(null)
 	// TODO: Unneded state logic - merge it into one
@@ -272,21 +273,54 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 						</Center>
 
-						<Center flex={1}>
-							<Text>
+						<Center 
+							flex={1}
+						>
+
+							<Select
+								mb={'3'}
+								shadow={2}
+								selectedValue={reportReason}
+								minWidth="200"
+								accessibilityLabel="Issue type"
+								placeholder="Issue type"
+								_selectedItem={{
+										// bg: "#2c5364",
+										color: "#fff",
+									}} _light={{
+										// bg: "#2c5364",
+										color: "#fff",
+									}} _dark={{
+										bg: "#2c5364",
+										// color: "#fff",
+									}} 
+								onValueChange={itemValue => setReportReason(itemValue)
+							}>
+									<Select.Item shadow={2} label="Pothole" value="pothole" />
+									<Select.Item shadow={2} label="Pedestrean obstacle" value="obstacle" />
+									<Select.Item shadow={2} label="Broken facade" value="facade" />
+									<Select.Item shadow={2} label="Dangerous infrastructure" value="dangerous" />
+									<Select.Item shadow={2} label="Irregular construction site" value="backend" />
+									<Select.Item shadow={2} label="Fixed repord" value="backend" />
+							</Select>
+
+							
+							<Text
+								color={'#fff'}
+								mb={'3'}
+							>
 								Rate the severity:
 							</Text>
 
 							{/* TODO: Build a star rating comp and replace the external one */}
 							<StarRating
+								style={styles.starsContainer}
 								rating={rating}
 								onChange={setRating}
 							/>
 						</Center>
 
 						<Button onPress={saveReport}> Submit report </Button>
-						{/* <Button onPress={() => uploadReport(crunchedPhoto)}> Fake report </Button> */}
-						{/* <Button onPress={() => testLocations()}> Fake report </Button> */}
 					</>
 				)
 			}
@@ -313,6 +347,10 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 18,
 		color: 'white',
+	},
+	starsContainer: {
+		marginLeft: 'auto',
+		marginRight: 'auto'
 	}
 })
 

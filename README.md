@@ -43,7 +43,7 @@ Each of the features is developped and working for both iOS and Android
 ## Current roadmap:
 1. Profile page
 ~~- Easier logout button~~
-- T&C and PP links
+~~- T&C and PP links~~
 2. Report templates - Ability to pre-defined reason for the report
 3. Ability to report that a previously reported issue has been fixed (with photo proof)
 4. Personal feed

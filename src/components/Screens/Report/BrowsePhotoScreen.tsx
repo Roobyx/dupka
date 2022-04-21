@@ -71,7 +71,7 @@ const BrowsePhotoScreen = ({navigation}: NavElement) => {
 
 							<Pressable
 								w='20'
-								onPress={() => navigation.navigate('CreateReport', { photoPath, photoExif, origin: 'gallery' })}>
+								onPress={() => navigation.navigate('Create Report', { photoPath, photoExif, origin: 'gallery' })}>
 
 								<Center>
 									<Text style={styles.text}> Save </Text>

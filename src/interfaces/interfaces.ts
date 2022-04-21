@@ -26,6 +26,11 @@ export interface IFabMenu {
 	actionSheetItems: TActionSheetItem[]
 }
 
+export interface IActionMenuContainer {
+	actionSheetTitle: string,
+	actionSheetItems: TActionSheetItem[]
+}
+
 export interface INavigate {
 	(screen: string): void
 }
