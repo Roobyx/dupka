@@ -1,13 +1,13 @@
 // Vendor
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import { Fab, Actionsheet, Box, Text, useDisclose} from 'native-base'
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {Fab, Actionsheet, Box, Text, useDisclose} from 'native-base';
 // Types & Interfaces
-import { IFabMenu } from '../../interfaces/interfaces'
-import ActionSheetContainer from './ActionSheetContainer'
+import {IFabMenu} from '../../interfaces/interfaces';
+import ActionSheetContainer from './ActionSheetContainer';
 
 const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
-	const { isOpen, onOpen, onClose } = useDisclose()
+	const {isOpen, onOpen, onClose} = useDisclose();
 
 	return (
 		<>
@@ -20,38 +20,41 @@ const FabMenu = ({fab, actionSheetTitle, actionSheetItems}: IFabMenu) => {
 				onPress={onOpen}
 			/>
 
-			<ActionSheetContainer 
-				actionSheetTitle = {actionSheetTitle} 
-				actionSheetItems = {actionSheetItems}
+			<ActionSheetContainer
+				actionSheetTitle={actionSheetTitle}
+				actionSheetItems={actionSheetItems}
 			/>
-			{/* <Actionsheet isOpen={isOpen} onClose={onClose}>
+			<Actionsheet isOpen={isOpen} onClose={onClose}>
 				<Actionsheet.Content>
-					<Box w="100%" h={60} px={4} justifyContent="center">
-						<Text fontSize="16"
-							color="gray.500"
+					<Box w='100%' h={60} px={4} justifyContent='center'>
+						<Text
+							fontSize='16'
+							color='gray.500'
 							_dark={{
-								color: "gray.300",
-							}} >
-								
+								color: 'gray.300',
+							}}
+						>
 							{actionSheetTitle}
 						</Text>
 					</Box>
 
-					{
-						actionSheetItems.map(
-							(asItem, index) => (
-								<Actionsheet.Item key={index} onPress={asItem.itemCallback}><Text>{asItem.text}</Text></Actionsheet.Item>
-							)
-						)
-					}
-					<Actionsheet.Item onPress={onClose}><Text>Cancel</Text></Actionsheet.Item>
+					{actionSheetItems.map((asItem, index) => (
+						<Actionsheet.Item
+							key={index}
+							onPress={asItem.itemCallback}
+						>
+							<Text>{asItem.text}</Text>
+						</Actionsheet.Item>
+					))}
+					<Actionsheet.Item onPress={onClose}>
+						<Text>Cancel</Text>
+					</Actionsheet.Item>
 				</Actionsheet.Content>
-			</Actionsheet> */}
+			</Actionsheet>
 		</>
-	)
-}
+	);
+};
 
-export default FabMenu
+export default FabMenu;
 
-const styles = StyleSheet.create({
-})
+const styles = StyleSheet.create({});

@@ -62,3 +62,8 @@ Each of the features is developped and working for both iOS and Android
 ## Known issues
 - Map type switch actionsheet does not close itself on map switch
 - Location is not always renewed and some reports end up on older locations (potentially fixed, but needs testing)
+
+
+## App versioning:
+
+1.48.1.0: v1, expo SDK 48, build 1.1

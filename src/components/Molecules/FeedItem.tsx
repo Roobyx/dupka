@@ -41,7 +41,7 @@ type TFeedItem = {
 const FeedItem = ({report}: TFeedItem) => {
 	const userId = useAppSelector(getUserId);
 	const dispatch = useAppDispatch();
-	const dispatch2 = useAppDispatch();
+	// const dispatch2 = useAppDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
 	const [rating, setRating] = useState(0);
@@ -280,9 +280,9 @@ const FeedItem = ({report}: TFeedItem) => {
 				>
 					{reportRated.current ? 'Rated' : 'Rate'}
 				</Button>
+
 				<Button rounded='none' w='50%' onPress={onShare}>
-					{' '}
-					Share{' '}
+					Share
 				</Button>
 			</HStack>
 

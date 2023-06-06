@@ -25,3 +25,8 @@ export type TActionSheetItem = {
 	itemCallback: () => void,
 	text: string
 }
+
+export type photoSize = {
+	width: number;
+	height: number;
+};
