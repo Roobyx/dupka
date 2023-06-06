@@ -10,9 +10,9 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
+*.log
 web-build/
 .env
-./yarn-error.log
 
 # macOS
 .DS_Store
