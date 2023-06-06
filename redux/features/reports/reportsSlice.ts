@@ -2,9 +2,9 @@ import { createSlice, PayloadAction, createDraftSafeSelector } from "@reduxjs/to
 import { RootState } from "../../store"
 import { Report } from '../../../src/interfaces/interfaces'
 
-type ReportsState = {
-	allReports: Report[]
-}
+// type ReportsState = {
+// 	allReports: Report[]
+// }
 
 const initialReportState = {
 	allReports: []
@@ -26,24 +26,12 @@ const selectSelf = (state: RootState) => state
 
 export const getAllReports = createDraftSafeSelector(
 	selectSelf,
-	state => {
-		return state.reports.allReports
-	}
+	state => state.reports.allReports
 )
 
 export const getUnnaprovedReportsCount = createDraftSafeSelector(
 	selectSelf,
-	state => {
-		let unapproved = 0
-
-		state.reports.allReports.forEach((report: Report) => {
-			if (report.status === 'pending') {
-				unapproved++
-			}
-		})
-
-		return unapproved
-	}
+	state => state.reports.allReports.filter((report: Report) => report.status === 'pending').length
 )
 
 export default reportsSlice.reducer

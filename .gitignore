@@ -1,6 +1,8 @@
 node_modules/
 node_modules2/
-.expo/
+tunnel/*
+.expo/*
+.expo_temp/*
 npm-debug.*
 *.jks
 *.p8
@@ -10,6 +12,7 @@ npm-debug.*
 *.orig.*
 web-build/
 .env
+./yarn-error.log
 
 # macOS
 .DS_Store

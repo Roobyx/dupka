@@ -34,7 +34,7 @@ export const authSlice = createSlice({
 	}
 })
 
-export const { setActiveUser, logUserOut } = authSlice.actions
+export const { setActiveUser, setLoading, logUserOut } = authSlice.actions
 
 const selectSelf = (state: RootState) => state
 
