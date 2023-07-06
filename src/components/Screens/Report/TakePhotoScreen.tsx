@@ -54,6 +54,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 	const [photoSize, setPhotoSize] = useState<photoSize | null>(null);
 	const [type, setType] = useState(CameraType.back);
 	const [flashMode, setFlashMode] = useState(FlashMode.off);
+	const [isCameraReady, setIsCameraReady] = useState(false);
 	const [faceDetected, setFaceDetected] = useState<TFaceDetectionObject>({
 		faceDetected: false,
 	});
@@ -76,6 +77,10 @@ const TakePhotoScreen = ({navigation}: any) => {
 		} else if (flashMode === FlashMode.torch) {
 			setFlashMode(FlashMode.off);
 		}
+	};
+
+	const onCameraReady = () => {
+		setIsCameraReady(true);
 	};
 
 	const takePhoto = async () => {
@@ -101,20 +106,25 @@ const TakePhotoScreen = ({navigation}: any) => {
 
 	// Face detection
 	const handleFaceDetection = ({faces}: {faces: any[]}) => {
-		console.log('Face detected:');
+		console.log('preparing detection');
+		if (isCameraReady) {
+			console.log('Face detected:');
 
-		if (faces.length === 1) {
-			// detect a face
-			setFaceDetected({
-				faceDetected: true, // variable state to hold face is detected
-				faceBox: faces[0].bounds, // variable to hold face location
-			});
+			if (faces.length === 1) {
+				// detect a face
+				setFaceDetected({
+					faceDetected: true, // variable state to hold face is detected
+					faceBox: faces[0].bounds, // variable to hold face location
+				});
+			} else {
+				// no faces detected
+				setFaceDetected({faceDetected: false});
+			}
+
+			console.log('---> ', faceDetected);
 		} else {
-			// no faces detected
-			setFaceDetected({faceDetected: false});
+			console.log('Camera not ready');
 		}
-
-		console.log('---> ', faceDetected);
 	};
 
 	return (
@@ -190,6 +200,7 @@ const TakePhotoScreen = ({navigation}: any) => {
 						type={type}
 						ratio={'4:3'}
 						flashMode={flashMode}
+						onCameraReady={onCameraReady}
 						onFacesDetected={handleFaceDetection}
 						// onFaceDetectionError={this.handleFaceDetectionError}
 						faceDetectorSettings={{

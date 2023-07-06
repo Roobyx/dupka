@@ -13,10 +13,10 @@ import {useAppDispatch, useAppSelector} from '../../../redux/features/hooks';
 
 // RN Maps
 import MapView, {
-	PROVIDER_GOOGLE,
 	Heatmap,
 	Marker,
 	Callout,
+	PROVIDER_GOOGLE,
 } from 'react-native-maps';
 // WeightedLatLng // TODO: Check why was this needed
 

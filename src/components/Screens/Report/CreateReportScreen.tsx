@@ -328,6 +328,11 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 							<Select.Item
 								shadow={2}
+								label='Repairs gone wrong'
+								value='backend'
+							/>
+							<Select.Item
+								shadow={2}
 								label='Pedestrean obstacle'
 								value='obstacle'
 							/>
@@ -348,7 +353,7 @@ const CreateReport = ({route, navigation}: CreateReportComponent) => {
 							/>
 							<Select.Item
 								shadow={2}
-								label='Fixed repord'
+								label='Fixed report'
 								value='backend'
 							/>
 						</Select>
